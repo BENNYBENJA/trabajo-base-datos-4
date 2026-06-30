@@ -1618,3 +1618,169 @@ tbody tr:hover {
   box-shadow: none;
   cursor: not-allowed;
 }
+
+/* ============================================================= */
+/* RESPONSIVE — Tablet (max 900px)                               */
+/* ============================================================= */
+
+@media (max-width: 900px) {
+  .app-shell {
+    padding: 16px 8px;
+  }
+
+  .report-card {
+    padding: 24px 18px;
+    border-radius: 20px;
+    gap: 22px;
+  }
+
+  .filters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .store-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .store-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 20px;
+  }
+}
+
+/* ============================================================= */
+/* RESPONSIVE — Mobile (max 600px)                               */
+/* ============================================================= */
+
+@media (max-width: 600px) {
+  .app-shell {
+    padding: 10px 6px;
+  }
+
+  .report-card {
+    padding: 16px 12px;
+    border-radius: 16px;
+    gap: 16px;
+    width: 100%;
+  }
+
+  /* ---- Hero ---- */
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding-bottom: 18px;
+  }
+
+  .hero h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero-copy {
+    font-size: 0.85rem;
+  }
+
+  .hero > div:last-child {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .hero-badge {
+    font-size: 0.75rem;
+  }
+
+  .user-badge {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .user-name {
+    font-size: 0.8rem;
+  }
+
+  .logout-button {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+  }
+
+  /* ---- Filters ---- */
+  .filters-panel {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .filters-actions {
+    margin-top: 12px;
+  }
+
+  .primary-button,
+  .secondary-button {
+    padding: 10px 20px;
+    font-size: 0.88rem;
+  }
+
+  /* ---- Store Banner ---- */
+  .store-banner {
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .store-banner-icon {
+    font-size: 1.5rem;
+  }
+
+  .store-banner-title {
+    font-size: 1.1rem;
+  }
+
+  .store-banner-stats {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  /* ---- Product Grid ---- */
+  .store-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  /* ---- Cart Drawer (full screen on mobile) ---- */
+  .cart-drawer {
+    width: 100vw;
+    border-radius: 0;
+    border-left: none;
+  }
+
+  /* ---- Reviews Modal ---- */
+  .reviews-modal {
+    width: 98%;
+    border-radius: 16px;
+    max-height: 95vh;
+  }
+
+  .modal-body {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .modal-header {
+    padding: 16px;
+  }
+}
+
