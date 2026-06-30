@@ -155,20 +155,20 @@ function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, onLoginOpen, l
             className="navbar-search-input"
             value={busqueda}
             onChange={e => setBusqueda(e.target.value)}
-            placeholder="Search premium hardware..."
+            placeholder="Buscar hardware premium..."
           />
           <span className="navbar-search-icon">🔍</span>
         </form>
 
         {/* Navigation links matching mockup */}
         <nav className={`navbar-nav-links ${menuOpen ? 'open' : ''}`}>
-          <button onClick={() => irAPagina('tienda', 'CAT003')}>Laptops</button>
-          <button onClick={() => irAPagina('tienda', 'CAT007')}>Components</button>
+          <button onClick={() => irAPagina('tienda', 'CAT003')}>Notebooks</button>
+          <button onClick={() => irAPagina('tienda', 'CAT007')}>Componentes</button>
           <button onClick={() => irAPagina('tienda', 'CAT005')}>Gaming</button>
-          <button onClick={() => irAPagina('tienda', 'CAT002')}>Peripherals</button>
-          <button onClick={() => irAPagina('tienda', 'ofertas')}>Deals</button>
+          <button onClick={() => irAPagina('tienda', 'CAT002')}>Periféricos</button>
+          <button onClick={() => irAPagina('tienda', 'ofertas')}>Ofertas</button>
           {usuario && esAdmin && (
-            <button className="nav-admin-link" onClick={() => irAPagina('admin')}>⚙️ Admin</button>
+            <button className="nav-admin-link" onClick={() => irAPagina('admin')}>⚙️ Panel Admin</button>
           )}
         </nav>
 
@@ -216,14 +216,14 @@ function HeroBanner({ irADetalle }) {
   return (
     <section className="hero-banner">
       <div className="hero-banner-content">
-        <span className="hero-eyebrow">WINTER SEASON 2024</span>
+        <span className="hero-eyebrow">TEMPORADA DE INVIERNO 2024</span>
         <h1 className="hero-title">Gamer de <br /><span className="highlight">Invierno</span></h1>
         <p className="hero-description">
           Equípate con lo último en tecnología térmica y hardware de alto rendimiento para las noches más frías. Descubre setups inmersivos diseñados para la victoria.
         </p>
         <div className="hero-actions-row">
-          <button className="hero-btn-primary" onClick={() => irADetalle('PROD001')}>SHOP NOW</button>
-          <button className="hero-btn-secondary">VIEW CAMPAIGN</button>
+          <button className="hero-btn-primary" onClick={() => irADetalle('PROD001')}>COMPRAR AHORA</button>
+          <button className="hero-btn-secondary">VER CAMPAÑA</button>
         </div>
       </div>
       <div className="hero-banner-image-wrap">
@@ -289,7 +289,7 @@ function Recomendados({ productos, alAgregarAlCarrito, irADetalle, onLoginOpen, 
               <span className="rec-mini-category">{sec1.categoria?.nombre || 'PERIFÉRICOS'}</span>
               <h4 className="rec-mini-title">{sec1.nombre}</h4>
               <p className="rec-mini-price">{formatoCLP.format(sec1.precio)} CLP</p>
-              <span className="rec-mini-action">VER DETALLES</span>
+              <span className="rec-mini-action">VER DETALLES ➔</span>
             </div>
             <div className="rec-mini-img-wrap">
               <img src={sec1.imagen} alt={sec1.nombre} className="rec-mini-img" />
@@ -300,7 +300,7 @@ function Recomendados({ productos, alAgregarAlCarrito, irADetalle, onLoginOpen, 
           <div className="rec-two-cols-row">
             {/* Redragon keyboard item */}
             <div className="rec-submini-card" onClick={() => irADetalle(sec2._id)}>
-              <span className="rec-mini-category">KEYBOARDS</span>
+              <span className="rec-mini-category">TECLADOS</span>
               <h4 className="rec-mini-title">{sec2.nombre}</h4>
               <div className="rec-submini-bottom">
                 <p className="rec-mini-price">{formatoCLP.format(sec2.precio)} CLP</p>
@@ -318,7 +318,7 @@ function Recomendados({ productos, alAgregarAlCarrito, irADetalle, onLoginOpen, 
 
             {/* Promo Card */}
             <div className="rec-promo-card">
-              <span className="rec-mini-category">PROMO</span>
+              <span className="rec-mini-category">PROMOCIÓN</span>
               <h4 className="rec-mini-title">Gift Cards</h4>
               <p className="rec-promo-desc">Regala Tecnología</p>
               <span className="rec-promo-icon">🎁</span>
@@ -845,8 +845,8 @@ function Store() {
         {/* 🛒 VIEW: FULL SHOPPING CART PAGE (Matches Image 3) */}
         {pagina === 'carrito' && (
           <div className="shopping-cart-page">
-            <h1 className="cart-page-title">Shopping Cart</h1>
-            <span className="cart-items-count-badge">{totalItemsCarrito} ITEMS</span>
+            <h1 className="cart-page-title">Carrito de Compras</h1>
+            <span className="cart-items-count-badge">{totalItemsCarrito} PRODUCTOS</span>
 
             <div className="cart-page-layout">
               {/* Left Column: Items List */}
@@ -867,7 +867,7 @@ function Store() {
                         <div className="cart-item-main-details">
                           <h3 className="cart-item-title-text">{item.nombre}</h3>
                           <span className="cart-item-sku">SKU: {item._id}</span>
-                          <button className="cart-item-remove-btn" onClick={() => alEliminarDelCarrito(item._id)}>✕ REMOVE</button>
+                          <button className="cart-item-remove-btn" onClick={() => alEliminarDelCarrito(item._id)}>✕ ELIMINAR</button>
                         </div>
                         <div className="cart-item-quantity-controls">
                           <button onClick={() => alCambiarCantidad(item._id, item.cantidad - 1)}>−</button>
@@ -884,7 +884,7 @@ function Store() {
 
                 {/* Accepted Payment methods strip from mockup */}
                 <div className="accepted-payment-strip">
-                  <span className="payment-label">ACCEPTED PAYMENT METHODS</span>
+                  <span className="payment-label">MÉTODOS DE PAGO ACEPTADOS</span>
                   <div className="payment-badges">
                     <span className="payment-badge">VISA</span>
                     <span className="payment-badge">MC</span>
@@ -897,7 +897,7 @@ function Store() {
 
               {/* Right Column: Order Summary (Matches Mockup Image 3 exactly) */}
               <div className="order-summary-column">
-                <h2 className="summary-title">Order Summary</h2>
+                <h2 className="summary-title">Resumen del Pedido</h2>
                 
                 <div className="summary-details-box">
                   <div className="summary-row">
@@ -905,20 +905,20 @@ function Store() {
                     <strong>{formatoCLP.format(totalCarrito)}</strong>
                   </div>
                   <div className="summary-row">
-                    <span>Estimated Shipping</span>
-                    <strong className="free-label">FREE</strong>
+                    <span>Envío Estimado</span>
+                    <strong className="free-label">GRATIS</strong>
                   </div>
                   <div className="summary-row">
-                    <span>Tax (Calculated at checkout)</span>
-                    <strong>$0.00</strong>
+                    <span>Impuestos (Calculado al finalizar)</span>
+                    <strong>$0</strong>
                   </div>
                 </div>
 
                 <div className="promo-code-input-wrap">
-                  <span className="promo-label">PROMO CODE</span>
+                  <span className="promo-label">CÓDIGO PROMOCIONAL</span>
                   <div className="promo-form-row">
-                    <input type="text" placeholder="Enter code" />
-                    <button type="button">APPLY</button>
+                    <input type="text" placeholder="Ingresa tu código" />
+                    <button type="button">APLICAR</button>
                   </div>
                 </div>
 
@@ -928,7 +928,7 @@ function Store() {
                 </div>
 
                 <button className="proceed-to-checkout-btn" onClick={alFinalizarCompra} disabled={!carrito.length}>
-                  PROCEED TO CHECKOUT
+                  PROCEDER AL PAGO
                 </button>
               </div>
             </div>
