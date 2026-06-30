@@ -8,76 +8,35 @@ import ClienteStore from './components/Cliente/ClienteStore';
 const api = axios.create({ baseURL: '/api' });
 const formatoCLP = new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
 
-// Faux specs for products to show in details page
 const obtenerEspecificaciones = (producto) => {
   const nombre = (producto.nombre || '').toLowerCase();
   if (nombre.includes('hyperx') || nombre.includes('sony') || nombre.includes('razer') || nombre.includes('airpods') || nombre.includes('jbl')) {
     return [
-      { titulo: 'Transductor', valor: 'Dinámico de 53 mm con imanes de neodimio' },
-      { titulo: 'Respuesta de frecuencia', valor: '10 Hz - 21 kHz' },
-      { titulo: 'Conectividad', valor: 'Inalámbrica USB / Jack 3.5mm / Bluetooth' },
-      { titulo: 'Micrófono', valor: 'Condensador electret unidireccional' },
-      { titulo: 'Peso', valor: '308g (con micrófono)' },
-      { titulo: 'Compatibilidad', valor: 'PC, PS5, Xbox, Switch, Móvil' }
+      { titulo: 'SPATIAL AUDIO', valor: 'Precise 3D soundstage.' },
+      { titulo: 'CLEAR MIC', valor: 'Ultra-clear voice capture.' }
     ];
   }
   if (nombre.includes('teclado') || nombre.includes('corsair') || nombre.includes('redragon')) {
     return [
-      { titulo: 'Tipo de Switch', valor: 'Mecánico (Switches Red / Brown de alta respuesta)' },
-      { titulo: 'Distribución', valor: 'Español (ISO) o TKL compacto' },
-      { titulo: 'Retroiluminación', valor: 'RGB configurable tecla por tecla' },
-      { titulo: 'Conexión', valor: 'Cable USB trenzado extraíble tipo C' },
-      { titulo: 'Material', valor: 'Aluminio de grado aeroespacial' },
-      { titulo: 'Anti-ghosting', valor: '100% teclas con Full Key Rollover' }
+      { titulo: 'SWITCH MECÁNICO', valor: 'Switches Red de alta respuesta.' },
+      { titulo: 'RGB CHROMA', valor: 'Retroiluminación configurable.' }
     ];
   }
-  if (nombre.includes('mouse') || nombre.includes('logitech') || nombre.includes('steelseries')) {
-    return [
-      { titulo: 'Sensor', valor: 'Óptico de alta precisión 25.600 DPI' },
-      { titulo: 'Velocidad máxima', valor: '400 IPS' },
-      { titulo: 'Aceleración', valor: '40 G' },
-      { titulo: 'Tasa de sondeo', valor: '1.000 Hz (1ms)' },
-      { titulo: 'Peso', valor: '63g ultra liviano' },
-      { titulo: 'Batería', valor: 'Hasta 70 horas de uso continuo' }
-    ];
-  }
-  if (nombre.includes('monitor') || nombre.includes('samsung') || nombre.includes('lg') || nombre.includes('benq') || nombre.includes('art')) {
-    return [
-      { titulo: 'Tamaño de pantalla', valor: '27 pulgadas / 24 pulgadas' },
-      { titulo: 'Resolución', valor: 'QHD 2560 x 1440 o Full HD 1080p' },
-      { titulo: 'Tasa de refresco', valor: '144Hz / 165Hz ultra fluido' },
-      { titulo: 'Tiempo de respuesta', valor: '1ms (GtG)' },
-      { titulo: 'Tecnología de panel', valor: 'IPS / VA curvo 1000R' },
-      { titulo: 'Sincronización', valor: 'FreeSync Premium & G-Sync Compatible' }
-    ];
-  }
-  if (nombre.includes('rtx') || nombre.includes('gpu') || nombre.includes('componente') || nombre.includes('ryzen') || nombre.includes('cpu')) {
-    return [
-      { titulo: 'Arquitectura', valor: 'NVIDIA Ada Lovelace / AMD Zen 4' },
-      { titulo: 'Memoria VRAM / Núcleos', valor: '12GB GDDR6X / 12 Núcleos 24 Hilos' },
-      { titulo: 'Frecuencia de Reloj', valor: 'Boost Clock 2.47 GHz' },
-      { titulo: 'Interfaz de Memoria', valor: '192-bit' },
-      { titulo: 'Consumo (TDP)', valor: '220W / 120W recomendado' },
-      { titulo: 'Soporte PCIe', valor: 'PCI Express 4.0 x16' }
-    ];
-  }
-  // Default fallback
   return [
-    { titulo: 'Garantía', valor: '12 meses directo con fabricante' },
-    { titulo: 'Estado', valor: 'Nuevo en caja original sellada' },
-    { titulo: 'Despacho', valor: 'Disponible para envío express 24h' },
-    { titulo: 'Origen', valor: 'Importado de alta calidad' }
+    { titulo: 'DESPACHO RÁPIDO', valor: 'Envío prioritario en 24 horas.' },
+    { titulo: 'GARANTÍA OFICIAL', valor: '12 meses con soporte directo.' }
   ];
 };
 
 /* ──────────────────────────────────────────
-   LOGIN MODAL (Glassmorphic)
+   VIEW: FULLSCREEN LOGIN PAGE / VIEW (Image 3)
 ────────────────────────────────────────── */
-function LoginModal({ onClose }) {
+function LoginPage({ onLoginSuccess, irAPagina }) {
   const { login } = useAuth();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
   const manejarSubmit = async (e) => {
     e.preventDefault();
@@ -86,7 +45,7 @@ function LoginModal({ onClose }) {
     try {
       const { data } = await api.post('/login', form);
       login(data.usuario);
-      onClose();
+      onLoginSuccess();
     } catch (err) {
       setError(err.response?.data?.message || 'Email o contraseña incorrectos');
     } finally {
@@ -95,44 +54,86 @@ function LoginModal({ onClose }) {
   };
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="login-modal" onClick={e => e.stopPropagation()}>
-        <button className="login-modal-close" onClick={onClose}>✕</button>
-        <div className="login-modal-logo">
-          <span className="logo-bolt">⚡</span>
-          <span className="logo-name">TechStore</span>
+    <div className="login-screen-view">
+      <div className="login-screen-logo-wrap">
+        <div className="login-screen-icon-box">
+          <span className="processor-icon">⚙️</span>
         </div>
-        <h2 className="login-modal-title">Iniciar sesión</h2>
-        <p className="login-modal-sub">Ingresa tus credenciales para continuar</p>
+        <h1 className="login-screen-title">TechStore</h1>
+        <p className="login-screen-subtitle">LUMINOUS TECH EXPERIENCE</p>
+      </div>
 
-        <form onSubmit={manejarSubmit} className="login-modal-form">
-          <label className="lm-field">
-            <span>Email</span>
-            <input type="email" name="email" value={form.email} onChange={e => setForm(p => ({ ...p, email: e.target.value }))} placeholder="tu@email.cl" required autoFocus />
-          </label>
-          <label className="lm-field">
-            <span>Contraseña</span>
-            <input type="password" name="password" value={form.password} onChange={e => setForm(p => ({ ...p, password: e.target.value }))} placeholder="••••••••" required />
-          </label>
-          {error && <div className="lm-error">{error}</div>}
-          <button type="submit" className="lm-submit" disabled={cargando}>
-            {cargando ? 'Ingresando...' : 'Ingresar'}
-          </button>
-        </form>
+      <form onSubmit={manejarSubmit} className="login-screen-form">
+        <label className="ls-field">
+          <span>EMAIL ADDRESS</span>
+          <div className="ls-input-wrap">
+            <span className="ls-icon">@</span>
+            <input 
+              type="email" 
+              value={form.email} 
+              onChange={e => setForm(p => ({ ...p, email: e.target.value }))} 
+              placeholder="dev@techstore.com" 
+              required 
+            />
+          </div>
+        </label>
 
-        <div className="login-modal-hint">
-          <p>🔑 Admin: <code>admin@techstore.cl</code> / <code>admin123</code></p>
-          <p>👤 Cliente: <code>juan@gmail.com</code> / <code>cliente123</code></p>
-        </div>
+        <label className="ls-field">
+          <div className="ls-field-header">
+            <span>PASSWORD</span>
+            <button type="button" className="forgot-pass-btn">Forgot password?</button>
+          </div>
+          <div className="ls-input-wrap">
+            <span className="ls-icon">🔒</span>
+            <input 
+              type={showPass ? "text" : "password"} 
+              value={form.password} 
+              onChange={e => setForm(p => ({ ...p, password: e.target.value }))} 
+              placeholder="••••••••" 
+              required 
+            />
+            <button type="button" className="ls-eye-btn" onClick={() => setShowPass(!showPass)}>
+              {showPass ? "👁️" : "👁️‍🗨️"}
+            </button>
+          </div>
+        </label>
+
+        {error && <div className="ls-error">{error}</div>}
+
+        <button type="submit" className="ls-submit-btn" disabled={cargando}>
+          {cargando ? 'Ingresando...' : 'Entrar'}
+        </button>
+      </form>
+
+      <div className="ls-divider">
+        <span>OR CONTINUE WITH</span>
+      </div>
+
+      <div className="ls-social-buttons">
+        <button className="ls-social-btn google-btn">
+          <span className="social-icon">🌐</span> Google
+        </button>
+        <button className="ls-social-btn apple-btn">
+          <span className="social-icon">🍎</span> Apple
+        </button>
+      </div>
+
+      <p className="ls-footer-register">
+        Don't have an account? <span className="register-link">Register</span>
+      </p>
+
+      <div className="ls-demo-credentials">
+        <p>🔑 Admin: <code>admin@techstore.cl</code> / <code>admin123</code></p>
+        <p>👤 Cliente: <code>juan@gmail.com</code> / <code>cliente123</code></p>
       </div>
     </div>
   );
 }
 
 /* ──────────────────────────────────────────
-   MAIN NAVIGATION & HEADER (Matches mockups)
+   HEADER / NAVBAR
 ────────────────────────────────────────── */
-function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, onLoginOpen, logout, busqueda, setBusqueda, alBuscar }) {
+function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, logout, busqueda, setBusqueda, alBuscar }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const manejarSubmitBusqueda = (e) => {
@@ -143,8 +144,12 @@ function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, onLoginOpen, l
   return (
     <header className="navbar">
       <div className="navbar-inner">
+        {/* Menu burger on left (matches mobile mockup) */}
+        <button className="navbar-hamburger" onClick={() => setMenuOpen(m => !m)}>
+          <span /><span /><span />
+        </button>
+
         <a href="/" className="navbar-logo" onClick={e => { e.preventDefault(); irAPagina('tienda'); }}>
-          <span className="logo-bolt">⚡</span>
           <span className="logo-name">TechStore</span>
         </a>
 
@@ -182,72 +187,59 @@ function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, onLoginOpen, l
                   {totalItemsCarrito > 0 && <span className="cart-badge">{totalItemsCarrito}</span>}
                 </button>
               )}
-              <div className="navbar-user-menu">
-                <button className="navbar-action-btn-icon" onClick={logout} title="Cerrar Sesión">
-                  👤
-                </button>
-                <span className="navbar-user-tooltip">Salir ({usuario.nombre?.split(' ')[0]})</span>
-              </div>
+              <button className="navbar-action-btn-icon" onClick={logout} title="Cerrar Sesión">
+                👤
+              </button>
             </>
           ) : (
             <>
-              <button className="navbar-action-btn-icon" onClick={onLoginOpen} title="Iniciar Sesión">
+              <button className="navbar-action-btn-icon" onClick={() => irAPagina('login')} title="Iniciar Sesión">
                 👤
               </button>
-              <button className="navbar-action-btn-icon" onClick={onLoginOpen} title="Ver Carrito">
+              <button className="navbar-action-btn-icon" onClick={() => irAPagina('login')} title="Ver Carrito">
                 🛒
               </button>
             </>
           )}
         </div>
-
-        <button className="navbar-hamburger" onClick={() => setMenuOpen(m => !m)}>
-          <span /><span /><span />
-        </button>
       </div>
     </header>
   );
 }
 
 /* ──────────────────────────────────────────
-   OFERTAS HERO BANNER (Matches Image 1/5)
+   OFERTAS HERO BANNER (Matches Mobile Banner)
 ────────────────────────────────────────── */
 function HeroBanner({ irADetalle }) {
   return (
     <section className="hero-banner">
-      <div className="hero-banner-content">
-        <span className="hero-eyebrow">TEMPORADA DE INVIERNO 2024</span>
-        <h1 className="hero-title">Gamer de <br /><span className="highlight">Invierno</span></h1>
-        <p className="hero-description">
-          Equípate con lo último en tecnología térmica y hardware de alto rendimiento para las noches más frías. Descubre setups inmersivos diseñados para la victoria.
-        </p>
-        <div className="hero-actions-row">
-          <button className="hero-btn-primary" onClick={() => irADetalle('PROD001')}>COMPRAR AHORA</button>
-          <button className="hero-btn-secondary">VER CAMPAÑA</button>
-        </div>
-      </div>
       <div className="hero-banner-image-wrap">
         <img 
-          src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80" 
-          alt="Premium Gaming Setup" 
+          src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&q=80" 
+          alt="Premium Notebook Setup" 
           className="hero-banner-image"
         />
         <div className="hero-image-overlay" />
       </div>
-      <div className="hero-dots-indicator">
-        <span className="dot active" />
-        <span className="dot" />
-        <span className="dot" />
+      <div className="hero-banner-content">
+        <span className="hero-eyebrow">EDICIÓN ESPECIAL</span>
+        <h1 className="hero-title">Gamer de Invierno</h1>
+        <p className="hero-description">
+          Potencia gélida para tus partidas más calientes.
+        </p>
+        <button className="hero-btn-primary" onClick={() => irADetalle('PROD001')}>
+          Explorar Colección ➔
+        </button>
       </div>
     </section>
   );
 }
 
 /* ──────────────────────────────────────────
-   TE RECOMENDAMOS (Matches Image 1)
+   TE RECOMENDAMOS (Matches Mobile Grid/Scroll)
 ────────────────────────────────────────── */
 function Recomendados({ productos, alAgregarAlCarrito, irADetalle, onLoginOpen, usuario }) {
-  // Let's find specific recommended items or fallback to first items
+  // Take recommended items
   const principal = productos.find(p => p._id === 'PROD001') || productos[0];
   const sec1 = productos.find(p => p._id === 'PROD003') || productos[1];
   const sec2 = productos.find(p => p._id === 'PROD002') || productos[2];
@@ -258,71 +250,52 @@ function Recomendados({ productos, alAgregarAlCarrito, irADetalle, onLoginOpen, 
     <section className="recommended-section">
       <div className="recommended-header">
         <div>
+          <span className="rec-eyebrow-small">SELECCIÓN TECH</span>
           <h2 className="section-main-title">Te recomendamos</h2>
-          <p className="section-sub-title">Hardware seleccionado por nuestros expertos</p>
         </div>
-        <button className="view-all-link">VER TODO ➔</button>
+        <button className="view-all-link">Ver Todo</button>
       </div>
 
-      <div className="recommended-grid">
-        {/* Left Column: Huge featured card */}
-        <div className="rec-featured-card" onClick={() => irADetalle(principal._id)}>
-          <div className="rec-featured-img-wrap">
-            <img src={principal.imagen} alt={principal.nombre} className="rec-featured-img" />
-            <div className="rec-featured-glow" />
+      <div className="recommended-scroll-container">
+        {/* Card 1 */}
+        <div className="rec-card" onClick={() => irADetalle(principal._id)}>
+          <button className="rec-heart-btn">♥</button>
+          <div className="rec-img-box">
+            <img src={principal.imagen} alt={principal.nombre} />
           </div>
-          <div className="rec-featured-body">
-            <div className="rec-badges-row">
-              <span className="rec-badge premium">PREMIUM</span>
-              <span className="rec-badge oferta">OFERTA</span>
-            </div>
-            <h3 className="rec-featured-title">{principal.nombre}</h3>
-            <p className="rec-featured-price">{formatoCLP.format(principal.precio)} CLP</p>
+          <span className="rec-category">AUDIO PRO</span>
+          <h3 className="rec-title">{principal.nombre}</h3>
+          <div className="rec-price-row">
+            <span className="rec-price">{formatoCLP.format(principal.precio)}</span>
+            <button className="rec-add-button" onClick={(e) => { e.stopPropagation(); usuario ? alAgregarAlCarrito(principal) : onLoginOpen(); }}>+</button>
           </div>
         </div>
 
-        {/* Right Column: Stacked list */}
-        <div className="rec-stacked-column">
-          {/* Card 1 */}
-          <div className="rec-mini-card" onClick={() => irADetalle(sec1._id)}>
-            <div className="rec-mini-body">
-              <span className="rec-mini-category">{sec1.categoria?.nombre || 'PERIFÉRICOS'}</span>
-              <h4 className="rec-mini-title">{sec1.nombre}</h4>
-              <p className="rec-mini-price">{formatoCLP.format(sec1.precio)} CLP</p>
-              <span className="rec-mini-action">VER DETALLES ➔</span>
-            </div>
-            <div className="rec-mini-img-wrap">
-              <img src={sec1.imagen} alt={sec1.nombre} className="rec-mini-img" />
-            </div>
+        {/* Card 2 */}
+        <div className="rec-card" onClick={() => irADetalle(sec1._id)}>
+          <button className="rec-heart-btn">♥</button>
+          <div className="rec-img-box">
+            <img src={sec1.imagen} alt={sec1.nombre} />
           </div>
+          <span className="rec-category">GAMING</span>
+          <h3 className="rec-title">{sec1.nombre}</h3>
+          <div className="rec-price-row">
+            <span className="rec-price">{formatoCLP.format(sec1.precio)}</span>
+            <button className="rec-add-button" onClick={(e) => { e.stopPropagation(); usuario ? alAgregarAlCarrito(sec1) : onLoginOpen(); }}>+</button>
+          </div>
+        </div>
 
-          {/* Card 2 */}
-          <div className="rec-two-cols-row">
-            {/* Redragon keyboard item */}
-            <div className="rec-submini-card" onClick={() => irADetalle(sec2._id)}>
-              <span className="rec-mini-category">TECLADOS</span>
-              <h4 className="rec-mini-title">{sec2.nombre}</h4>
-              <div className="rec-submini-bottom">
-                <p className="rec-mini-price">{formatoCLP.format(sec2.precio)} CLP</p>
-                <button 
-                  className="rec-cart-mini-btn" 
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
-                    usuario ? alAgregarAlCarrito(sec2) : onLoginOpen(); 
-                  }}
-                >
-                  🛒
-                </button>
-              </div>
-            </div>
-
-            {/* Promo Card */}
-            <div className="rec-promo-card">
-              <span className="rec-mini-category">PROMOCIÓN</span>
-              <h4 className="rec-mini-title">Gift Cards</h4>
-              <p className="rec-promo-desc">Regala Tecnología</p>
-              <span className="rec-promo-icon">🎁</span>
-            </div>
+        {/* Card 3 */}
+        <div className="rec-card" onClick={() => irADetalle(sec2._id)}>
+          <button className="rec-heart-btn">♥</button>
+          <div className="rec-img-box">
+            <img src={sec2.imagen} alt={sec2.nombre} />
+          </div>
+          <span className="rec-category">PERIFÉRICOS</span>
+          <h3 className="rec-title">{sec2.nombre}</h3>
+          <div className="rec-price-row">
+            <span className="rec-price">{formatoCLP.format(sec2.precio)}</span>
+            <button className="rec-add-button" onClick={(e) => { e.stopPropagation(); usuario ? alAgregarAlCarrito(sec2) : onLoginOpen(); }}>+</button>
           </div>
         </div>
       </div>
@@ -331,13 +304,12 @@ function Recomendados({ productos, alAgregarAlCarrito, irADetalle, onLoginOpen, 
 }
 
 /* ──────────────────────────────────────────
-   MAIN COMPONENT
+   MAIN STORE
 ────────────────────────────────────────── */
 function Store() {
   const { usuario, logout, esAdmin } = useAuth();
-  const [loginOpen, setLoginOpen] = useState(false);
   
-  // Navigation states: 'tienda' | 'detalle' | 'carrito' | 'admin'
+  // Navigation states: 'tienda' | 'detalle' | 'carrito' | 'admin' | 'login' | 'buscar'
   const [pagina, setPagina] = useState('tienda');
   const [productoDetalleId, setProductoDetalleId] = useState(null);
 
@@ -368,9 +340,8 @@ function Store() {
   const [reviewsLoading, setReviewsLoading] = useState(false);
   const [nuevaCalificacion, setNuevaCalificacion] = useState(5);
   const [nuevoComentario, setNuevoComentario] = useState('');
-  const [reviewError, setReviewError] = useState('');
 
-  // Handle auto-clearing alerts/notices
+  // Auto-clear notices
   useEffect(() => {
     if (!notice) return;
     const t = setTimeout(() => setNotice(''), 3500);
@@ -410,7 +381,6 @@ function Store() {
         precioMin: '',
         precioMax: ''
       });
-      // Scroll to top
       window.scrollTo(0, 0);
     }
   };
@@ -420,7 +390,6 @@ function Store() {
     setPagina('detalle');
     window.scrollTo(0, 0);
     setReviewsLoading(true);
-    setReviewError('');
     setNuevaCalificacion(5);
     setNuevoComentario('');
     try {
@@ -434,7 +403,7 @@ function Store() {
   };
 
   const alAgregarAlCarrito = (producto) => {
-    if (!usuario) { setLoginOpen(true); return; }
+    if (!usuario) { setPagina('login'); return; }
     const existe = carrito.find(i => i._id === producto._id);
     if (existe && existe.cantidad >= producto.stock) { 
       setNotice(`⚠️ Stock máximo alcanzado para ${producto.nombre}`); 
@@ -494,13 +463,12 @@ function Store() {
       });
       setNuevoComentario(''); 
       setNuevaCalificacion(5); 
-      setReviewError('');
       setNotice('⭐ ¡Gracias por tu reseña!');
       const r = await api.get(`/productos/${productoDetalleId}/reviews`); 
       setReviews(r.data);
       cargarProductos();
     } catch (err) { 
-      setReviewError(err.response?.data?.message || 'No se pudo guardar.'); 
+      setError(err.response?.data?.message || 'No se pudo guardar.'); 
     }
   };
 
@@ -518,7 +486,6 @@ function Store() {
     setAplicado({ busqueda: '', categoriaFiltro: '', precioMin: '', precioMax: '' }); 
   };
 
-  // Admin form management
   const manejarCambioFormulario = e => { 
     const { name, value } = e.target; 
     setForm(p => ({ ...p, [name]: value })); 
@@ -579,16 +546,12 @@ function Store() {
 
   return (
     <div className="app-shell">
-      {/* Login Modal */}
-      {loginOpen && <LoginModal onClose={() => setLoginOpen(false)} />}
-
       {/* Header / Navbar */}
       <Header
         usuario={usuario} 
         esAdmin={esAdmin}
         totalItemsCarrito={totalItemsCarrito}
         irAPagina={navegarAPagina}
-        onLoginOpen={() => setLoginOpen(true)}
         logout={logout}
         busqueda={busqueda}
         setBusqueda={setBusqueda}
@@ -642,26 +605,37 @@ function Store() {
           </div>
         )}
 
+        {/* ⚙️ VIEW: LOGIN PAGE (Image 3) */}
+        {pagina === 'login' && (
+          <LoginPage 
+            onLoginSuccess={() => setPagina('tienda')} 
+            irAPagina={navegarAPagina} 
+          />
+        )}
+
         {/* 👤 VIEW: TIENDA HOME */}
         {pagina === 'tienda' && (
           <div className="store-wrapper">
-            {/* Hero / Promo slider */}
+            {/* Hero / Promo banner */}
             <HeroBanner irADetalle={irADetalle} />
 
-            {/* "Te Recomendamos" Grid section */}
+            {/* "Te Recomendamos" Grid/Scroll section */}
             {!loading && productos.length >= 3 && (
               <Recomendados
                 productos={productos}
                 alAgregarAlCarrito={alAgregarAlCarrito}
                 irADetalle={irADetalle}
-                onLoginOpen={() => setLoginOpen(true)}
+                onLoginOpen={() => setPagina('login')}
                 usuario={usuario}
               />
             )}
 
             {/* Catalog header & filter pills */}
             <div className="cat-header-pills-row">
-              <h2 className="catalog-title">Catálogo de Compra</h2>
+              <div className="catalog-title-wrapper">
+                <span className="cat-eyebrow-small">CATÁLOGO COMPLETO</span>
+                <h2 className="catalog-title">Explora Componentes</h2>
+              </div>
               <div className="cat-pills-row">
                 <button className={`cat-pill ${!categoriaFiltro ? 'active' : ''}`} onClick={() => { setCategoriaFiltro(''); setAplicado(p => ({ ...p, categoriaFiltro: '' })); }}>Todo</button>
                 {categorias.map(c => (
@@ -689,19 +663,29 @@ function Store() {
               </>
             )}
 
-            {/* Login CTA for guests */}
-            {!usuario && !loading && (
-              <div className="guest-cta">
-                <p>🛒 ¿Te gusta lo que ves? <button onClick={() => setLoginOpen(true)}>Inicia sesión</button> para agregar productos al carrito y realizar compras.</p>
-              </div>
-            )}
+            {/* Purple Help card matching mockup bottom */}
+            <div className="help-box-card">
+              <h3 className="help-title">¿Necesitas Ayuda?</h3>
+              <p className="help-desc">Nuestros expertos técnicos están listos para asesorarte en tu próximo build.</p>
+              <button className="help-support-btn">Contactar Soporte</button>
+            </div>
           </div>
         )}
 
         {/* 📄 VIEW: PRODUCT DETAIL (Matches Image 2) */}
         {pagina === 'detalle' && prodDetalle && (
           <div className="product-detail-view">
-            {/* Breadcrumb navigation */}
+            {/* Header back button for mobile */}
+            <div className="detail-mobile-header">
+              <button className="back-btn" onClick={() => setPagina('tienda')}>←</button>
+              <span className="detail-header-title">TechStore</span>
+              <div className="detail-header-actions">
+                <button className="share-btn">🔗</button>
+                <button className="cart-btn" onClick={() => setPagina('carrito')}>🛒</button>
+              </div>
+            </div>
+
+            {/* Breadcrumb for desktop */}
             <div className="breadcrumb">
               <button onClick={() => setPagina('tienda')}>Home</button> ➔ 
               <span>{prodDetalle.categoria?.nombre || 'Producto'}</span> ➔ 
@@ -717,136 +701,82 @@ function Store() {
                   ) : (
                     <div className="detail-no-img">📦</div>
                   )}
+                  {/* Rating Badge Overlay (Matches mockup top right) */}
+                  <div className="detail-rating-pill-overlay">
+                    ★ {Number(prodDetalle.ratingPromedio || 4.9).toFixed(1)} ({prodDetalle.totalReviews || '1.2k'})
+                  </div>
                 </div>
-                {/* Thumbnails grid simulation */}
-                <div className="detail-thumbnails-row">
-                  <div className="thumbnail-box active"><img src={prodDetalle.imagen || ''} alt="view 1" /></div>
-                  <div className="thumbnail-box"><img src={prodDetalle.imagen || ''} alt="view 2" /></div>
-                  <div className="thumbnail-box"><img src={prodDetalle.imagen || ''} alt="view 3" /></div>
-                  <div className="thumbnail-box"><img src={prodDetalle.imagen || ''} alt="view 4" /></div>
+                {/* Dots indicator simulation */}
+                <div className="detail-dots-indicator">
+                  <span className="dot active" />
+                  <span className="dot" />
+                  <span className="dot" />
                 </div>
               </div>
 
               {/* Product Info & Purchase Column */}
               <div className="detail-info-column">
                 <div className="detail-brand-info">
-                  <span className="brand-badge">HYPERX PREMIUM AUDIO</span>
-                  <div className="detail-stars">
-                    {'★'.repeat(Math.round(prodDetalle.ratingPromedio || 5))}
-                    {'☆'.repeat(5 - Math.round(prodDetalle.ratingPromedio || 5))}
-                    <span className="rating-text"> {Number(prodDetalle.ratingPromedio || 5).toFixed(1)}/5 ({prodDetalle.totalReviews || 125} Reseñas)</span>
-                  </div>
+                  <span className="brand-badge">PREMIUM AUDIO</span>
                 </div>
 
                 <h1 className="detail-product-title">{prodDetalle.nombre}</h1>
 
                 <div className="detail-pricing-box">
-                  <span className="detail-price-amount">{formatoCLP.format(prodDetalle.precio)} <span className="currency-label">CLP</span></span>
-                  <div className="stock-badges-row">
-                    <span className="stock-badge in-stock">⚡ EN STOCK</span>
-                    <span className="delivery-badge">Despacho en 24 horas</span>
+                  <div className="detail-price-row">
+                    <span className="detail-price-amount">{formatoCLP.format(prodDetalle.precio)}</span>
+                    {prodDetalle.descuento > 0 && (
+                      <>
+                        <span className="detail-price-original">{formatoCLP.format(Math.round(prodDetalle.precio / (1 - prodDetalle.descuento / 100)))}</span>
+                        <span className="detail-discount-badge">{prodDetalle.descuento}% OFF</span>
+                      </>
+                    )}
                   </div>
                 </div>
 
-                <div className="detail-features-highlights">
-                  <h3>Características principales</h3>
-                  <ul>
-                    <li>Audio Espacial DTS® Headphone:X®</li>
-                    <li>Controladores de 53 mm afinados para juegos</li>
-                    <li>Comodidad y durabilidad exclusivas de HyperX</li>
-                  </ul>
+                {/* Grid of Two Highlight Specs (Image 2 style) */}
+                <div className="detail-specs-summary-grid">
+                  {specs.slice(0, 2).map((spec, idx) => (
+                    <div key={idx} className="spec-summary-card">
+                      <span className="spec-summary-icon">{idx === 0 ? '🔊' : '🎙️'}</span>
+                      <strong className="spec-summary-title">{spec.titulo}</strong>
+                      <p className="spec-summary-text">{spec.valor}</p>
+                    </div>
+                  ))}
                 </div>
 
-                {/* Purchase actions */}
-                <div className="detail-actions-box">
-                  <div className="detail-qty-picker">
-                    <button onClick={() => alAgregarAlCarrito(prodDetalle)}>Añadir al carrito</button>
-                  </div>
-                  <button className="detail-buy-now-btn" onClick={() => { alAgregarAlCarrito(prodDetalle); navegarAPagina('carrito'); }}>
-                    Comprar ahora
-                  </button>
+                <div className="detail-description-section">
+                  <h3>DESCRIPCIÓN</h3>
+                  <p>{prodDetalle.descripcion || 'Experimenta el pináculo del audio gaming con los Cloud III. Diseñados para sesiones maratónicas con espumas viscoelásticas de alta calidad y una estructura metálica ligera pero indestructible.'}</p>
                 </div>
 
-                <div className="detail-delivery-banner">
-                  <span className="delivery-icon">🚚</span>
-                  <div className="delivery-text">
-                    <strong>Envío prioritario disponible</strong>
-                    <p>Recibe mañana si compras antes de las 14:00.</p>
+                {/* Specs Accordion */}
+                <div className="detail-accordion-item">
+                  <div className="accordion-header">
+                    <span>ESPECIFICACIONES TÉCNICAS</span>
+                    <span>▼</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Technical Specifications specs grid (Image 2 specs layout) */}
-            <section className="detail-specs-section">
-              <h2 className="specs-section-title">Especificaciones Técnicas</h2>
-              <div className="specs-grid">
-                {specs.map((spec, i) => (
-                  <div key={i} className="spec-card">
-                    <span className="spec-title">{spec.titulo}</span>
-                    <p className="spec-value">{spec.valor}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Reviews Section inside details page */}
-            <section className="detail-reviews-section">
-              <div className="reviews-section-layout">
-                <div className="reviews-list-column">
-                  <h3 className="section-title">Opiniones de clientes</h3>
-                  {reviewsLoading ? <p className="muted-text">Cargando opiniones...</p>
-                    : !reviews.length ? <p className="muted-text">Aún no hay opiniones de este producto. ¡Sé el primero en calificar!</p>
-                      : <div className="detail-reviews-list">
-                        {reviews.map(r => (
-                          <div key={r._id} className="detail-review-card">
-                            <div className="review-header">
-                              <strong>{r.usuarioNombre}</strong>
-                              <span className="stars">{'★'.repeat(r.calificacion)}{'☆'.repeat(5 - r.calificacion)}</span>
-                            </div>
-                            <span className="review-date">{new Date(r.fecha).toLocaleDateString('es-CL')}</span>
-                            {r.comentario && <p className="review-comment-body">{r.comentario}</p>}
-                          </div>
-                        ))}
-                      </div>
-                  }
-                </div>
-
-                <div className="reviews-form-column">
-                  <h3 className="section-title">Calificar producto</h3>
-                  {usuario ? (
-                    <form onSubmit={guardarReview} className="detail-review-form">
-                      <div className="detail-star-selector">
-                        <span>Tu calificación:</span>
-                        <div className="stars-row">
-                          {[1,2,3,4,5].map(v => (
-                            <button key={v} type="button" className={`star-btn ${nuevaCalificacion >= v ? 'active' : ''}`} onClick={() => setNuevaCalificacion(v)}>★</button>
-                          ))}
-                        </div>
-                      </div>
-                      <label className="field field-wide">
-                        <span>Tu comentario</span>
-                        <textarea value={nuevoComentario} onChange={e => setNuevoComentario(e.target.value)} rows={3} placeholder="Cuéntanos tu experiencia con este producto..." className="review-textarea" required />
-                      </label>
-                      {reviewError && <div className="state-box error">{reviewError}</div>}
-                      <button type="submit" className="primary-button">Enviar calificación</button>
-                    </form>
-                  ) : (
-                    <div className="review-login-required">
-                      <p>Debes <button onClick={() => setLoginOpen(true)}>iniciar sesión</button> para calificar este producto.</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </section>
+            {/* Bottom sticky purchase row for mobile details (Matches Image 2 bottom bar) */}
+            <div className="detail-mobile-sticky-bar">
+              <button className="sticky-cart-icon-btn" onClick={() => alAgregarAlCarrito(prodDetalle)}>
+                🛒
+              </button>
+              <button className="sticky-buy-now-btn" onClick={() => { alAgregarAlCarrito(prodDetalle); setPagina('carrito'); }}>
+                Buy Now ➔
+              </button>
+            </div>
           </div>
         )}
 
-        {/* 🛒 VIEW: FULL SHOPPING CART PAGE (Matches Image 3) */}
+        {/* 🛒 VIEW: FULL SHOPPING CART PAGE (Matches Image 4) */}
         {pagina === 'carrito' && (
           <div className="shopping-cart-page">
-            <h1 className="cart-page-title">Carrito de Compras</h1>
-            <span className="cart-items-count-badge">{totalItemsCarrito} PRODUCTOS</span>
+            <h1 className="cart-page-title">Your Cart</h1>
+            <span className="cart-items-count-badge">{totalItemsCarrito} ITEMS</span>
 
             <div className="cart-page-layout">
               {/* Left Column: Items List */}
@@ -855,7 +785,7 @@ function Store() {
                   <div className="cart-empty-page">
                     <span className="cart-big-icon">🛒</span>
                     <h2>Tu carrito está vacío</h2>
-                    <button className="primary-button" onClick={() => navegarAPagina('tienda')}>Volver a la tienda</button>
+                    <button className="primary-button" onClick={() => setPagina('tienda')}>Volver a la tienda</button>
                   </div>
                 ) : (
                   <div className="cart-items-list-container">
@@ -865,60 +795,36 @@ function Store() {
                           <img src={item.imagen} alt={item.nombre} className="cart-page-item-img" />
                         </div>
                         <div className="cart-item-main-details">
+                          <span className="cart-item-category-label">PERIPHERALS</span>
                           <h3 className="cart-item-title-text">{item.nombre}</h3>
-                          <span className="cart-item-sku">SKU: {item._id}</span>
-                          <button className="cart-item-remove-btn" onClick={() => alEliminarDelCarrito(item._id)}>✕ ELIMINAR</button>
+                          <div className="cart-item-quantity-controls">
+                            <button onClick={() => alCambiarCantidad(item._id, item.cantidad - 1)}>−</button>
+                            <span>{item.cantidad}</span>
+                            <button onClick={() => alCambiarCantidad(item._id, item.cantidad + 1)} disabled={item.cantidad >= item.stock}>+</button>
+                          </div>
                         </div>
-                        <div className="cart-item-quantity-controls">
-                          <button onClick={() => alCambiarCantidad(item._id, item.cantidad - 1)}>−</button>
-                          <span>{item.cantidad}</span>
-                          <button onClick={() => alCambiarCantidad(item._id, item.cantidad + 1)} disabled={item.cantidad >= item.stock}>+</button>
-                        </div>
-                        <div className="cart-item-final-price">
-                          {formatoCLP.format(Number(item.precio || 0) * item.cantidad)}
+                        <div className="cart-item-price-column">
+                          <button className="cart-item-remove-btn" onClick={() => alEliminarDelCarrito(item._id)}>🗑️</button>
+                          <div className="cart-item-final-price">
+                            {formatoCLP.format(Number(item.precio || 0) * item.cantidad)}
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
                 )}
-
-                {/* Accepted Payment methods strip from mockup */}
-                <div className="accepted-payment-strip">
-                  <span className="payment-label">MÉTODOS DE PAGO ACEPTADOS</span>
-                  <div className="payment-badges">
-                    <span className="payment-badge">VISA</span>
-                    <span className="payment-badge">MC</span>
-                    <span className="payment-badge">AMEX</span>
-                    <span className="payment-badge">PAYPAL</span>
-                    <span className="payment-badge">APPLE</span>
-                  </div>
-                </div>
               </div>
 
-              {/* Right Column: Order Summary (Matches Mockup Image 3 exactly) */}
+              {/* Right Column: Order Summary (Matches Mockup Image 4 exactly) */}
               <div className="order-summary-column">
-                <h2 className="summary-title">Resumen del Pedido</h2>
-                
                 <div className="summary-details-box">
                   <div className="summary-row">
                     <span>Subtotal</span>
                     <strong>{formatoCLP.format(totalCarrito)}</strong>
                   </div>
                   <div className="summary-row">
-                    <span>Envío Estimado</span>
-                    <strong className="free-label">GRATIS</strong>
-                  </div>
-                  <div className="summary-row">
-                    <span>Impuestos (Calculado al finalizar)</span>
-                    <strong>$0</strong>
-                  </div>
-                </div>
-
-                <div className="promo-code-input-wrap">
-                  <span className="promo-label">CÓDIGO PROMOCIONAL</span>
-                  <div className="promo-form-row">
-                    <input type="text" placeholder="Ingresa tu código" />
-                    <button type="button">APLICAR</button>
+                    <span>Shipping</span>
+                    <strong className="free-label">FREE</strong>
                   </div>
                 </div>
 
@@ -928,10 +834,41 @@ function Store() {
                 </div>
 
                 <button className="proceed-to-checkout-btn" onClick={alFinalizarCompra} disabled={!carrito.length}>
-                  PROCEDER AL PAGO
+                  Proceed to Checkout
                 </button>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* 🔍 VIEW: BUSQUEDA/FILTROS EN MOVIL */}
+        {pagina === 'buscar' && (
+          <div className="mobile-search-screen">
+            <h2>Buscar Productos</h2>
+            <form onSubmit={aplicarFiltros} className="mobile-search-form">
+              <input 
+                type="text" 
+                value={busqueda} 
+                onChange={e => setBusqueda(e.target.value)} 
+                placeholder="Escribe lo que buscas..." 
+                className="search-input-field"
+              />
+              <div className="search-filters-box">
+                <label>
+                  <span>Categoría</span>
+                  <select value={categoriaFiltro} onChange={e => setCategoriaFiltro(e.target.value)}>
+                    <option value="">Todas</option>
+                    {categorias.map(c => <option key={c._id} value={c._id}>{c.nombre}</option>)}
+                  </select>
+                </label>
+                <div className="price-inputs-row">
+                  <input type="number" placeholder="Min CLP" value={precioMin} onChange={e => setPrecioMin(e.target.value)} />
+                  <input type="number" placeholder="Max CLP" value={precioMax} onChange={e => setPrecioMax(e.target.value)} />
+                </div>
+              </div>
+              <button type="submit" className="search-action-btn">Buscar ahora</button>
+              <button type="button" className="search-clear-btn" onClick={limpiarFiltros}>Limpiar Filtros</button>
+            </form>
           </div>
         )}
       </main>
@@ -975,13 +912,31 @@ function Store() {
               <a href="#contact">Contact Us</a>
               <a href="#shipping">Shipping Info</a>
             </div>
-            <div className="footer-social-icons">
-              <button className="social-btn">🔗</button>
-              <button className="social-btn">🌐</button>
-            </div>
           </div>
         </div>
       </footer>
+
+      {/* BOTTOM NAVIGATION TAB BAR FOR MOBILE (Matches Mockup bottom navigation) */}
+      <div className="mobile-bottom-nav">
+        <button className={`nav-tab-btn ${pagina === 'tienda' ? 'active' : ''}`} onClick={() => setPagina('tienda')}>
+          <span className="nav-tab-icon">🏠</span>
+          <span className="nav-tab-text">Shop</span>
+        </button>
+        <button className={`nav-tab-btn ${pagina === 'buscar' ? 'active' : ''}`} onClick={() => setPagina('buscar')}>
+          <span className="nav-tab-icon">🔍</span>
+          <span className="nav-tab-text">Search</span>
+        </button>
+        <button className={`nav-tab-btn ${pagina === 'carrito' ? 'active' : ''}`} onClick={() => setPagina('carrito')}>
+          <span className="nav-tab-icon">🛒
+            {totalItemsCarrito > 0 && <span className="tab-badge">{totalItemsCarrito}</span>}
+          </span>
+          <span className="nav-tab-text">Cart</span>
+        </button>
+        <button className={`nav-tab-btn ${pagina === 'login' || pagina === 'admin' ? 'active' : ''}`} onClick={() => setPagina(usuario ? (esAdmin ? 'admin' : 'tienda') : 'login')}>
+          <span className="nav-tab-icon">👤</span>
+          <span className="nav-tab-text">Profile</span>
+        </button>
+      </div>
     </div>
   );
 }
