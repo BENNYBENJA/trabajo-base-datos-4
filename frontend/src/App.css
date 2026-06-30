@@ -896,3 +896,451 @@ body {
   .specs-grid { grid-template-columns: 1fr; }
   .rec-two-cols-row { grid-template-columns: 1fr; height: auto; gap: 24px; }
 }
+
+/* ──────────────────────────────────────────
+   NAVBAR NEW ELEMENTS
+────────────────────────────────────────── */
+.logo-lightning {
+  font-size: 1.2rem;
+}
+
+.navbar-login-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 99px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.navbar-login-btn:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+}
+
+.navbar-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  color: var(--text-primary);
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.navbar-user-pill:hover {
+  background: rgba(124, 58, 237, 0.2);
+  border-color: var(--accent);
+}
+.navbar-user-name {
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar-mobile-menu {
+  position: absolute;
+  top: var(--navbar-h);
+  left: 0;
+  right: 0;
+  background: rgba(6, 8, 19, 0.98);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  padding: 8px 0;
+  z-index: 499;
+  display: flex;
+  flex-direction: column;
+}
+.navbar-mobile-menu button {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 14px 24px;
+  text-align: left;
+  transition: all 0.15s;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.navbar-mobile-menu button:hover {
+  background: rgba(255,255,255,0.05);
+  color: white;
+}
+.navbar-mobile-menu .mobile-login-link {
+  color: #a78bfa;
+  font-weight: 700;
+}
+
+/* ──────────────────────────────────────────
+   LOGIN PAGE IMPROVEMENTS
+────────────────────────────────────────── */
+.login-back-btn {
+  align-self: flex-start;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 24px;
+  transition: color 0.2s;
+}
+.login-back-btn:hover { color: var(--text-primary); }
+
+/* ──────────────────────────────────────────
+   HERO BANNER IMPROVEMENTS
+────────────────────────────────────────── */
+.hero-highlight {
+  background: linear-gradient(135deg, #a78bfa, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-btn-secondary {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.hero-btn-secondary:hover {
+  background: rgba(255,255,255,0.14);
+}
+
+/* ──────────────────────────────────────────
+   OFERTAS HERO HEADER
+────────────────────────────────────────── */
+.ofertas-hero-header {
+  text-align: center;
+  padding: 60px 20px 40px;
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.12) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(124, 58, 237, 0.15);
+  margin-bottom: 40px;
+}
+.ofertas-eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 16px;
+}
+.ofertas-title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+.ofertas-subtitle {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.ofertas-pill {
+  background: rgba(251, 191, 36, 0.1) !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+  color: #fbbf24 !important;
+}
+.ofertas-pill:hover {
+  background: rgba(251, 191, 36, 0.18) !important;
+}
+
+.volver-tienda-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.volver-tienda-btn:hover { color: white; border-color: var(--accent); }
+
+/* ──────────────────────────────────────────
+   PRODUCT DETAIL IMPROVEMENTS
+────────────────────────────────────────── */
+.detail-price-note {
+  font-size: 0.78rem;
+  color: var(--success);
+  margin-top: 4px;
+}
+
+.stock-badge-green {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--success);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+.stock-badge-red {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+.rating-count-pill {
+  font-size: 0.75rem;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
+.detail-discount-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--danger);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+
+.detail-desktop-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+.detail-add-cart-btn {
+  flex: 1;
+  background: rgba(124, 58, 237, 0.15);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  color: #a78bfa;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.detail-add-cart-btn:hover {
+  background: rgba(124, 58, 237, 0.25);
+}
+.detail-add-cart-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.detail-buy-now-btn {
+  flex: 1;
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.detail-buy-now-btn:hover { background: #6d28d9; transform: translateY(-1px); }
+.detail-buy-now-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ──────────────────────────────────────────
+   REVIEWS SECTION
+────────────────────────────────────────── */
+.detail-reviews-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.reviews-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.review-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.review-author {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.review-stars {
+  color: #fbbf24;
+  font-size: 0.85rem;
+}
+.review-text {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+.no-reviews-msg {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-bottom: 16px;
+}
+
+.review-form {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 16px;
+}
+.review-form h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+.star-rating-input {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.star-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: rgba(255,255,255,0.15);
+  transition: color 0.15s;
+  padding: 0;
+}
+.star-btn.active { color: #fbbf24; }
+.star-btn:hover { color: #fbbf24; }
+.review-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-primary);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  resize: none;
+  outline: none;
+  margin-bottom: 12px;
+}
+.review-textarea:focus {
+  border-color: var(--accent);
+}
+.review-submit-btn {
+  background: var(--accent);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.review-submit-btn:hover { background: #6d28d9; }
+
+/* ──────────────────────────────────────────
+   CART PAGE IMPROVEMENTS
+────────────────────────────────────────── */
+.cart-page-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.cart-item-unit-price {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.cart-item-no-img {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: var(--bg-card);
+}
+.summary-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+.continue-shopping-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-secondary);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s;
+}
+.continue-shopping-btn:hover { color: white; border-color: rgba(255,255,255,0.2); }
+
+/* ──────────────────────────────────────────
+   MOBILE NAV - OFERTA TAB
+────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .navbar-login-btn { display: none; }
+  .navbar-user-pill .navbar-user-name { display: none; }
+  .hero-buttons { flex-direction: column; }
+  .hero-btn-secondary { display: none; }
+  .ofertas-title { font-size: 2rem; }
+  .detail-desktop-actions { display: none; }
+  .detail-reviews-section { margin-bottom: 80px; }
+}
