@@ -5,6 +5,7 @@ export default function ClienteStore({
   carrito,
   alAgregarAlCarrito,
   alAbrirReviews,
+  irADetalle,
   formatoCLP
 }) {
   const cantidadEnCarrito = (productoId) => {
@@ -36,7 +37,11 @@ export default function ClienteStore({
             : null;
 
           return (
-            <article key={producto._id} className={`store-card ${!tieneStock ? 'sold-out' : ''}`}>
+            <article
+              key={producto._id}
+              className={`store-card ${!tieneStock ? 'sold-out' : ''}`}
+              onClick={() => irADetalle && irADetalle(producto._id)}
+            >
               <div className="store-card-img-wrap">
                 {producto.imagen ? (
                   <img src={producto.imagen} alt={producto.nombre} className="store-card-img" />
@@ -67,7 +72,7 @@ export default function ClienteStore({
                   <button
                     type="button"
                     className="store-card-rating-btn"
-                    onClick={() => alAbrirReviews(producto)}
+                    onClick={(e) => { e.stopPropagation(); irADetalle && irADetalle(producto._id); }}
                     title="Ver reseñas"
                   >
                     {producto.totalReviews > 0 ? (
@@ -99,7 +104,7 @@ export default function ClienteStore({
                   <button
                     type="button"
                     className={`store-add-btn ${qty > 0 ? 'in-cart' : ''}`}
-                    onClick={() => alAgregarAlCarrito(producto)}
+                    onClick={(e) => { e.stopPropagation(); alAgregarAlCarrito(producto); }}
                     disabled={!puedeAgregar}
                   >
                     {qty > 0

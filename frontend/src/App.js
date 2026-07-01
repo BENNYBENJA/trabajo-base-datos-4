@@ -42,14 +42,17 @@ const obtenerEspecificaciones = (producto) => {
 };
 
 /* ──────────────────────────────────────────
-   VIEW: PÁGINA DE INICIO DE SESIÓN
+   VIEW: PÁGINA DE INICIO DE SESIÓN / REGISTRO
 ────────────────────────────────────────── */
 function PaginaLogin({ alIniciarSesion, irAPagina }) {
   const { login } = useAuth();
+  const [vista, setVista] = useState('login'); // 'login' | 'registro'
   const [form, setForm] = useState({ email: '', password: '' });
+  const [regForm, setRegForm] = useState({ nombre: '', correo: '', contrasena: '', confirmar: '' });
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
   const [mostrarPass, setMostrarPass] = useState(false);
+  const [registroExitoso, setRegistroExitoso] = useState(false);
 
   const manejarSubmit = async (e) => {
     e.preventDefault();
@@ -66,6 +69,39 @@ function PaginaLogin({ alIniciarSesion, irAPagina }) {
     }
   };
 
+  const manejarRegistro = async (e) => {
+    e.preventDefault();
+    setError('');
+    if (regForm.contrasena !== regForm.confirmar) {
+      setError('Las contraseñas no coinciden');
+      return;
+    }
+    if (regForm.contrasena.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres');
+      return;
+    }
+    setCargando(true);
+    try {
+      await api.post('/usuarios/register', {
+        nombre: regForm.nombre,
+        correo: regForm.correo,
+        contrasena: regForm.contrasena,
+        id_rol: 2 // cliente
+      });
+      setRegistroExitoso(true);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Error al registrar. Intenta de nuevo.');
+    } finally {
+      setCargando(false);
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    // Simula login con Google usando cuenta demo
+    login({ id: 99, nombre: 'Usuario Google', email: 'google@demo.cl', rol: 'cliente' });
+    alIniciarSesion();
+  };
+
   return (
     <div className="login-screen-view">
       <button className="login-back-btn" onClick={() => irAPagina('tienda')}>← Volver a la tienda</button>
@@ -78,71 +114,130 @@ function PaginaLogin({ alIniciarSesion, irAPagina }) {
         <p className="login-screen-subtitle">EXPERIENCIA TECH PREMIUM</p>
       </div>
 
-      <form onSubmit={manejarSubmit} className="login-screen-form">
-        <label className="ls-field">
-          <span>CORREO ELECTRÓNICO</span>
-          <div className="ls-input-wrap">
-            <span className="ls-icon">@</span>
-            <input
-              type="email"
-              value={form.email}
-              onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
-              placeholder="dev@techstore.cl"
-              required
-              autoComplete="email"
-            />
-          </div>
-        </label>
+      {vista === 'login' ? (
+        <>
+          <form onSubmit={manejarSubmit} className="login-screen-form">
+            <label className="ls-field">
+              <span>CORREO ELECTRÓNICO</span>
+              <div className="ls-input-wrap">
+                <span className="ls-icon">@</span>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                  placeholder="dev@techstore.cl"
+                  required
+                  autoComplete="email"
+                />
+              </div>
+            </label>
 
-        <label className="ls-field">
-          <div className="ls-field-header">
-            <span>CONTRASEÑA</span>
-            <button type="button" className="forgot-pass-btn">¿Olvidaste tu contraseña?</button>
+            <label className="ls-field">
+              <div className="ls-field-header">
+                <span>CONTRASEÑA</span>
+                <button type="button" className="forgot-pass-btn">¿Olvidaste tu contraseña?</button>
+              </div>
+              <div className="ls-input-wrap">
+                <span className="ls-icon">🔒</span>
+                <input
+                  type={mostrarPass ? "text" : "password"}
+                  value={form.password}
+                  onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
+                  placeholder="••••••••"
+                  required
+                  autoComplete="current-password"
+                />
+                <button type="button" className="ls-eye-btn" onClick={() => setMostrarPass(!mostrarPass)}>
+                  {mostrarPass ? "👁️" : "👁️‍🗨️"}
+                </button>
+              </div>
+            </label>
+
+            {error && <div className="ls-error">⚠️ {error}</div>}
+
+            <button type="submit" className="ls-submit-btn" disabled={cargando}>
+              {cargando ? 'Ingresando...' : 'Iniciar Sesión'}
+            </button>
+          </form>
+
+          <div className="ls-divider">
+            <span>O CONTINÚA CON</span>
           </div>
-          <div className="ls-input-wrap">
-            <span className="ls-icon">🔒</span>
-            <input
-              type={mostrarPass ? "text" : "password"}
-              value={form.password}
-              onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
-              placeholder="••••••••"
-              required
-              autoComplete="current-password"
-            />
-            <button type="button" className="ls-eye-btn" onClick={() => setMostrarPass(!mostrarPass)}>
-              {mostrarPass ? "👁️" : "👁️‍🗨️"}
+
+          <div className="ls-social-buttons">
+            <button className="ls-social-btn google-btn" type="button" onClick={handleGoogleLogin}>
+              <svg width="18" height="18" viewBox="0 0 18 18" style={{marginRight:'6px',flexShrink:0}}>
+                <path fill="#4285F4" d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.47h4.84c-.21 1.12-.84 2.07-1.79 2.7v2.24h2.9c1.69-1.55 2.69-3.85 2.69-6.57z"/>
+                <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.24c-.8.54-1.84.87-3.06.87-2.35 0-4.34-1.58-5.05-3.71H.95v2.3C2.43 15.98 5.48 18 9 18z"/>
+                <path fill="#FBBC05" d="M3.95 10.74c-.18-.54-.28-1.12-.28-1.74s.1-1.2.28-1.74V4.96H.95C.35 6.17 0 7.55 0 9s.35 2.83.95 4.04l3-2.3z"/>
+                <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35L15 2.4C13.46.97 11.41 0 9 0 5.48 0 2.43 2.02.95 4.96l3 2.3c.71-2.13 2.7-3.68 5.05-3.68z"/>
+              </svg>
+              Continuar con Google
             </button>
           </div>
-        </label>
 
-        {error && <div className="ls-error">⚠️ {error}</div>}
+          <p className="ls-footer-register">
+            ¿No tienes cuenta? <span className="register-link" onClick={() => { setVista('registro'); setError(''); }}>Regístrate gratis</span>
+          </p>
 
-        <button type="submit" className="ls-submit-btn" disabled={cargando}>
-          {cargando ? 'Ingresando...' : 'Iniciar Sesión'}
-        </button>
-      </form>
-
-      <div className="ls-divider">
-        <span>O CONTINÚA CON</span>
-      </div>
-
-      <div className="ls-social-buttons">
-        <button className="ls-social-btn google-btn" type="button">
-          <span className="social-icon">🌐</span> Google
-        </button>
-        <button className="ls-social-btn apple-btn" type="button">
-          <span className="social-icon">🍎</span> Apple
-        </button>
-      </div>
-
-      <p className="ls-footer-register">
-        ¿No tienes cuenta? <span className="register-link">Regístrate gratis</span>
-      </p>
-
-      <div className="ls-demo-credentials">
-        <p>🔑 Admin: <code>admin@techstore.cl</code> / <code>admin123</code></p>
-        <p>👤 Cliente: <code>juan@gmail.com</code> / <code>cliente123</code></p>
-      </div>
+          <div className="ls-demo-credentials">
+            <p>🔑 Admin: <code>admin@techstore.cl</code> / <code>admin123</code></p>
+            <p>👤 Cliente: <code>juan@gmail.com</code> / <code>cliente123</code></p>
+          </div>
+        </>
+      ) : (
+        // VISTA DE REGISTRO
+        registroExitoso ? (
+          <div className="register-success">
+            <div className="register-success-icon">✅</div>
+            <h3>¡Cuenta creada exitosamente!</h3>
+            <p>Ya puedes iniciar sesión con tu correo y contraseña.</p>
+            <button className="ls-submit-btn" style={{marginTop:'20px'}} onClick={() => { setVista('login'); setRegistroExitoso(false); setRegForm({ nombre:'', correo:'', contrasena:'', confirmar:'' }); }}>
+              Ir a Iniciar Sesión
+            </button>
+          </div>
+        ) : (
+          <>
+            <form onSubmit={manejarRegistro} className="login-screen-form">
+              <label className="ls-field">
+                <span>NOMBRE COMPLETO</span>
+                <div className="ls-input-wrap">
+                  <span className="ls-icon">👤</span>
+                  <input type="text" value={regForm.nombre} onChange={e => setRegForm(p => ({...p, nombre: e.target.value}))} placeholder="Juan Pérez" required />
+                </div>
+              </label>
+              <label className="ls-field">
+                <span>CORREO ELECTRÓNICO</span>
+                <div className="ls-input-wrap">
+                  <span className="ls-icon">@</span>
+                  <input type="email" value={regForm.correo} onChange={e => setRegForm(p => ({...p, correo: e.target.value}))} placeholder="juan@correo.cl" required />
+                </div>
+              </label>
+              <label className="ls-field">
+                <span>CONTRASEÑA</span>
+                <div className="ls-input-wrap">
+                  <span className="ls-icon">🔒</span>
+                  <input type="password" value={regForm.contrasena} onChange={e => setRegForm(p => ({...p, contrasena: e.target.value}))} placeholder="Mínimo 6 caracteres" required />
+                </div>
+              </label>
+              <label className="ls-field">
+                <span>CONFIRMAR CONTRASEÑA</span>
+                <div className="ls-input-wrap">
+                  <span className="ls-icon">🔒</span>
+                  <input type="password" value={regForm.confirmar} onChange={e => setRegForm(p => ({...p, confirmar: e.target.value}))} placeholder="Repite la contraseña" required />
+                </div>
+              </label>
+              {error && <div className="ls-error">⚠️ {error}</div>}
+              <button type="submit" className="ls-submit-btn" disabled={cargando}>
+                {cargando ? 'Creando cuenta...' : 'Crear Cuenta Gratis'}
+              </button>
+            </form>
+            <p className="ls-footer-register">
+              ¿Ya tienes cuenta? <span className="register-link" onClick={() => { setVista('login'); setError(''); }}>Iniciar Sesión</span>
+            </p>
+          </>
+        )
+      )}
     </div>
   );
 }
@@ -150,8 +245,9 @@ function PaginaLogin({ alIniciarSesion, irAPagina }) {
 /* ──────────────────────────────────────────
    HEADER / BARRA DE NAVEGACIÓN
 ────────────────────────────────────────── */
-function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, logout, busqueda, setBusqueda, alBuscar }) {
+function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, logout, busqueda, setBusqueda, alBuscar, categorias = [] }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [catMenuOpen, setCatMenuOpen] = useState(false);
 
   const manejarSubmitBusqueda = (e) => {
     e.preventDefault();
@@ -186,11 +282,37 @@ function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, logout, busque
 
         {/* Links de navegación */}
         <nav className={`navbar-nav-links ${menuOpen ? 'open' : ''}`}>
-          <button onClick={() => { irAPagina('tienda', 'CAT003'); setMenuOpen(false); }}>Notebooks</button>
-          <button onClick={() => { irAPagina('tienda', 'CAT007'); setMenuOpen(false); }}>Componentes</button>
-          <button onClick={() => { irAPagina('tienda', 'CAT005'); setMenuOpen(false); }}>Gaming</button>
-          <button onClick={() => { irAPagina('tienda', 'CAT002'); setMenuOpen(false); }}>Periféricos</button>
-          <button onClick={() => { irAPagina('ofertas'); setMenuOpen(false); }}>Ofertas</button>
+          <div className="categories-dropdown-wrapper">
+            <button onClick={() => setCatMenuOpen(o => !o)} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              Categorías <span>{catMenuOpen ? '▲' : '▼'}</span>
+            </button>
+            {catMenuOpen && (
+              <div className="categories-dropdown-menu">
+                <button
+                  className="categories-dropdown-item"
+                  onClick={() => { irAPagina('tienda'); setCatMenuOpen(false); }}
+                >
+                  🏠 Todas las categorías
+                </button>
+                {categorias.map(c => (
+                  <button
+                    key={c._id}
+                    className="categories-dropdown-item"
+                    onClick={() => { irAPagina('tienda', c._id); setCatMenuOpen(false); }}
+                  >
+                    {c.nombre}
+                  </button>
+                ))}
+                <button
+                  className="categories-dropdown-item"
+                  style={{ color: '#fbbf24' }}
+                  onClick={() => { irAPagina('ofertas'); setCatMenuOpen(false); }}
+                >
+                  🏷️ Ofertas Especiales
+                </button>
+              </div>
+            )}
+          </div>
           {usuario && esAdmin && (
             <button className="nav-admin-link" onClick={() => { irAPagina('admin'); setMenuOpen(false); }}>⚙️ Admin</button>
           )}
@@ -216,8 +338,9 @@ function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, logout, busque
               <button className="navbar-login-btn" onClick={() => irAPagina('login')}>
                 Iniciar Sesión
               </button>
-              <button className="navbar-action-btn-icon" onClick={() => irAPagina('login')} title="Ver Carrito" aria-label="Carrito">
+              <button className="navbar-action-btn-icon" onClick={() => irAPagina('carrito')} title="Ver Carrito" aria-label="Carrito">
                 🛒
+                {totalItemsCarrito > 0 && <span className="cart-badge">{totalItemsCarrito}</span>}
               </button>
             </>
           )}
@@ -244,12 +367,12 @@ function Header({ usuario, esAdmin, totalItemsCarrito, irAPagina, logout, busque
 /* ──────────────────────────────────────────
    BANNER HERO
 ────────────────────────────────────────── */
-function BannerHero({ irADetalle }) {
+function BannerHero({ irADetalle, irAPagina }) {
   return (
     <section className="hero-banner">
       <div className="hero-banner-image-wrap">
         <img
-          src="https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=800&q=80"
+          src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=1400&q=80"
           alt="Setup Gamer Premium"
           className="hero-banner-image"
         />
@@ -262,10 +385,10 @@ function BannerHero({ irADetalle }) {
           Equípate con lo último en tecnología térmica y hardware de alto rendimiento para las noches más frías.
         </p>
         <div className="hero-buttons">
-          <button className="hero-btn-primary" onClick={() => irADetalle('PROD001')}>
+          <button className="hero-btn-primary" onClick={() => irAPagina && irAPagina('tienda')}>
             Explorar Colección ➔
           </button>
-          <button className="hero-btn-secondary">
+          <button className="hero-btn-secondary" onClick={() => irAPagina && irAPagina('ofertas')}>
             Ver Ofertas
           </button>
         </div>
@@ -304,7 +427,7 @@ function Recomendados({ productos, alAgregarAlCarrito, irADetalle, onAbrirLogin,
               <span className="rec-price">{formatoCLP.format(p.precio)}</span>
               <button
                 className="rec-add-button"
-                onClick={e => { e.stopPropagation(); usuario ? alAgregarAlCarrito(p) : onAbrirLogin(); }}
+                onClick={e => { e.stopPropagation(); alAgregarAlCarrito(p); }}
                 aria-label="Agregar al carrito"
               >+</button>
             </div>
@@ -353,6 +476,12 @@ function Store() {
   const [nuevaCalificacion, setNuevaCalificacion] = useState(5);
   const [nuevoComentario, setNuevoComentario] = useState('');
 
+  // Acordeón specs
+  const [specOpen, setSpecOpen] = useState(false);
+
+  // Checkout invitado
+  const [checkoutGuest, setCheckoutGuest] = useState({ nombre: '', email: '', telefono: '' });
+
   // Limpiar avisos automáticamente
   useEffect(() => {
     if (!notice) return;
@@ -383,9 +512,32 @@ function Store() {
     cargarProductos();
   }, [cargarCategorias, cargarProductos]);
 
+  // ── Gestión del botón "atrás" del navegador ──────────────────────────
+  const pushHistoryState = (paginaNueva, detalleId = null, ofertas = false) => {
+    window.history.pushState({ pagina: paginaNueva, productoDetalleId: detalleId, mostrarOfertas: ofertas }, '');
+  };
+
+  useEffect(() => {
+    const manejarPopState = () => {
+      const estado = window.history.state;
+      if (estado && estado.pagina) {
+        setPagina(estado.pagina);
+        setProductoDetalleId(estado.productoDetalleId || null);
+        setMostrarOfertas(estado.mostrarOfertas || false);
+      } else {
+        setPagina('tienda');
+        setMostrarOfertas(false);
+      }
+    };
+    window.addEventListener('popstate', manejarPopState);
+    window.history.replaceState({ pagina: 'tienda', productoDetalleId: null, mostrarOfertas: false }, '');
+    return () => window.removeEventListener('popstate', manejarPopState);
+  }, []);
+  // ────────────────────────────────────────────────────────────────────
+
   const navegarAPagina = (nombrePagina, catId = '') => {
-    // Manejar la vista de ofertas especialmente
     if (nombrePagina === 'ofertas') {
+      pushHistoryState('tienda', null, true);
       setMostrarOfertas(true);
       setPagina('tienda');
       setCategoriaFiltro('');
@@ -393,6 +545,7 @@ function Store() {
       window.scrollTo(0, 0);
       return;
     }
+    pushHistoryState(nombrePagina);
     setMostrarOfertas(false);
     setPagina(nombrePagina);
     if (nombrePagina === 'tienda') {
@@ -403,9 +556,11 @@ function Store() {
   };
 
   const irADetalle = async (id) => {
+    pushHistoryState('detalle', id);
     setProductoDetalleId(id);
     setPagina('detalle');
     setMostrarOfertas(false);
+    setSpecOpen(false);
     window.scrollTo(0, 0);
     setReviewsLoading(true);
     setNuevaCalificacion(5);
@@ -420,8 +575,26 @@ function Store() {
     }
   };
 
+  const irAlCarrito = () => {
+    pushHistoryState('carrito');
+    setPagina('carrito');
+    window.scrollTo(0, 0);
+  };
+
+  const irACheckout = (producto) => {
+    if (producto) {
+      // Comprar ahora: agregar el producto y abrir checkout
+      const existe = carrito.find(i => i._id === producto._id);
+      if (!existe) {
+        setCarrito(prev => [...prev, { ...producto, cantidad: 1 }]);
+      }
+    }
+    pushHistoryState('checkout');
+    setPagina('checkout');
+    window.scrollTo(0, 0);
+  };
+
   const alAgregarAlCarrito = (producto) => {
-    if (!usuario) { setPagina('login'); return; }
     const existe = carrito.find(i => i._id === producto._id);
     if (existe && existe.cantidad >= producto.stock) {
       setNotice(`⚠️ Stock máximo alcanzado para ${producto.nombre}`);
@@ -442,7 +615,8 @@ function Store() {
 
   const alEliminarDelCarrito = id => setCarrito(prev => prev.filter(i => i._id !== id));
 
-  const alFinalizarCompra = async () => {
+  const alFinalizarCompra = async (e) => {
+    if (e) e.preventDefault();
     if (!carrito.length) return;
     try {
       const items = carrito.map(i => ({
@@ -452,9 +626,9 @@ function Store() {
         cantidad: i.cantidad
       }));
       await api.post('/compras', {
-        usuarioId: usuario.id,
-        usuarioNombre: usuario.nombre,
-        usuarioEmail: usuario.email,
+        usuarioId: usuario ? usuario.id : null,
+        usuarioNombre: usuario ? usuario.nombre : checkoutGuest.nombre || 'Invitado',
+        usuarioEmail: usuario ? usuario.email : checkoutGuest.email || 'invitado@techstore.cl',
         items
       });
       setCarrito([]);
@@ -578,6 +752,7 @@ function Store() {
         busqueda={busqueda}
         setBusqueda={setBusqueda}
         alBuscar={aplicarFiltros}
+        categorias={categorias}
       />
 
       {/* Toast de notificaciones */}
@@ -639,7 +814,7 @@ function Store() {
         {pagina === 'tienda' && (
           <div className="store-wrapper">
             {/* Banner hero */}
-            {!mostrarOfertas && <BannerHero irADetalle={irADetalle} />}
+            {!mostrarOfertas && <BannerHero irADetalle={irADetalle} irAPagina={navegarAPagina} />}
 
             {/* Cabecera si estamos en Ofertas */}
             {mostrarOfertas && (
@@ -701,13 +876,52 @@ function Store() {
                 <button className="primary-button" onClick={() => { setMostrarOfertas(false); limpiarFiltros(); }}>Ver todos los productos</button>
               </div>
             ) : (
-              <ClienteStore
-                productos={productosMostrar}
-                carrito={carrito}
-                alAgregarAlCarrito={alAgregarAlCarrito}
-                alAbrirReviews={irADetalle}
-                formatoCLP={formatoCLP}
-              />
+              <div className="store-layout">
+                <div className="store-main">
+                  <ClienteStore
+                    productos={productosMostrar}
+                    carrito={carrito}
+                    alAgregarAlCarrito={alAgregarAlCarrito}
+                    alAbrirReviews={irADetalle}
+                    irADetalle={irADetalle}
+                    formatoCLP={formatoCLP}
+                  />
+                </div>
+
+                {!mostrarOfertas && (
+                  <aside className="store-sidebar">
+                    <div className="promo-ad-card" onClick={() => irADetalle('PROD030')}>
+                      <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=400&q=80" alt="GPU NVIDIA" className="promo-ad-img" />
+                      <div className="promo-ad-body">
+                        <span className="promo-ad-badge">DESTACADO</span>
+                        <h4 className="promo-ad-title">NVIDIA RTX 4070 Super 12GB</h4>
+                        <p className="promo-ad-desc">Potencia tu setup con trazado de rayos de última generación y DLSS 3.5.</p>
+                        <div className="promo-ad-price">{formatoCLP.format(699990)}</div>
+                      </div>
+                    </div>
+
+                    <div className="promo-ad-card" onClick={() => irADetalle('PROD006')}>
+                      <img src="https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=400&q=80" alt="ASUS ROG" className="promo-ad-img" />
+                      <div className="promo-ad-body">
+                        <span className="promo-ad-badge success">NUEVO</span>
+                        <h4 className="promo-ad-title">ASUS ROG Strix G16</h4>
+                        <p className="promo-ad-desc">Core i9 + RTX 4070 para el máximo rendimiento portátil.</p>
+                        <div className="promo-ad-price">{formatoCLP.format(1399990)}</div>
+                      </div>
+                    </div>
+
+                    <div className="promo-ad-card" onClick={() => irADetalle('PROD022')}>
+                      <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400&q=80" alt="PlayStation 5" className="promo-ad-img" />
+                      <div className="promo-ad-body">
+                        <span className="promo-ad-badge warning">HOT SALE</span>
+                        <h4 className="promo-ad-title">PlayStation 5 Slim</h4>
+                        <p className="promo-ad-desc">Disfruta de tiempos de carga mínimos y juegos exclusivos en 4K.</p>
+                        <div className="promo-ad-price">{formatoCLP.format(699990)}</div>
+                      </div>
+                    </div>
+                  </aside>
+                )}
+              </div>
             )}
 
             {/* Caja de ayuda */}
@@ -812,15 +1026,32 @@ function Store() {
                 {/* Descripción */}
                 <div className="detail-description-section">
                   <h3>DESCRIPCIÓN</h3>
-                  <p>{prodDetalle.descripcion || 'Producto de alta calidad con garantía oficial. Consulta con nuestros expertos para más información.'}</p>
+                <p>{prodDetalle.descripcion || 'Producto de alta calidad con garantía oficial. Consulta con nuestros expertos para más información.'}</p>
                 </div>
 
                 {/* Acordeón de specs */}
                 <div className="detail-accordion-item">
-                  <div className="accordion-header">
+                  <div
+                    className="accordion-header"
+                    onClick={() => setSpecOpen(o => !o)}
+                    style={{ cursor: 'pointer', userSelect: 'none' }}
+                  >
                     <span>ESPECIFICACIONES TÉCNICAS</span>
-                    <span>▼</span>
+                    <span style={{ transition: 'transform 0.25s', display: 'inline-block', transform: specOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</span>
                   </div>
+                  {specOpen && (
+                    <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {specs.map((spec, idx) => (
+                        <div key={idx} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                          <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{spec.icono}</span>
+                          <div>
+                            <div style={{ fontSize: '0.72rem', fontWeight: 800, letterSpacing: '0.08em', color: 'var(--accent-light)', marginBottom: '3px' }}>{spec.titulo}</div>
+                            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{spec.valor}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Botones de acción en escritorio */}
@@ -834,10 +1065,10 @@ function Store() {
                   </button>
                   <button
                     className="detail-buy-now-btn"
-                    onClick={() => { alAgregarAlCarrito(prodDetalle); setPagina('carrito'); }}
+                    onClick={() => irACheckout(prodDetalle)}
                     disabled={prodDetalle.stock <= 0}
                   >
-                    Comprar Ahora ➔
+                    Comprar Ahora ➞
                   </button>
                 </div>
 
@@ -986,7 +1217,7 @@ function Store() {
 
                   <button
                     className="proceed-to-checkout-btn"
-                    onClick={alFinalizarCompra}
+                    onClick={() => irACheckout()}
                     disabled={!carrito.length}
                   >
                     Proceder al Pago ➔
@@ -999,6 +1230,99 @@ function Store() {
             </div>
           </div>
         )}
+
+        {/* 💳 VISTA: CHECKOUT (PAGO) */}
+        {pagina === 'checkout' && (
+          <div style={{ maxWidth: '600px', margin: '40px auto 80px', padding: '0 24px' }}>
+            <button className="login-back-btn" onClick={() => setPagina('carrito')}>← Volver al carrito</button>
+            <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '24px', letterSpacing: '-0.02em', background: 'linear-gradient(135deg, white, var(--accent-light))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Finalizar Compra
+            </h2>
+
+            <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div style={{ borderBottom: '1px solid var(--border)', paddingBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>Total a pagar:</span>
+                <strong style={{ fontSize: '1.4rem', fontWeight: 900, color: 'white' }}>{formatoCLP.format(totalCarrito)}</strong>
+              </div>
+
+              <form onSubmit={alFinalizarCompra} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {usuario ? (
+                  <div style={{ background: 'rgba(124, 58, 237, 0.08)', border: '1px dashed rgba(124, 58, 237, 0.3)', borderRadius: 'var(--radius-md)', padding: '16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--accent-light)', letterSpacing: '0.1em' }}>SESIÓN ACTIVA</span>
+                    <strong style={{ color: 'white', fontSize: '0.95rem' }}>{usuario.nombre}</strong>
+                    <span style={{ color: 'var(--text-secondary)', fontSize: '0.85rem' }}>{usuario.email}</span>
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', padding: '14px 16px', fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: '1.5' }}>
+                      ⚡ Compra rápido como invitado sin registrarte, o <span className="register-link" onClick={() => setPagina('login')}>inicia sesión aquí</span> para guardar tu historial.
+                    </div>
+                    
+                    <label className="ls-field">
+                      <span>NOMBRE COMPLETO</span>
+                      <div className="ls-input-wrap">
+                        <span className="ls-icon">👤</span>
+                        <input
+                          type="text"
+                          value={checkoutGuest.nombre}
+                          onChange={e => setCheckoutGuest(p => ({ ...p, nombre: e.target.value }))}
+                          placeholder="Juan Pérez"
+                          required
+                        />
+                      </div>
+                    </label>
+
+                    <label className="ls-field">
+                      <span>CORREO ELECTRÓNICO</span>
+                      <div className="ls-input-wrap">
+                        <span className="ls-icon">@</span>
+                        <input
+                          type="email"
+                          value={checkoutGuest.email}
+                          onChange={e => setCheckoutGuest(p => ({ ...p, email: e.target.value }))}
+                          placeholder="juan.perez@gmail.com"
+                          required
+                        />
+                      </div>
+                    </label>
+
+                    <label className="ls-field">
+                      <span>TELÉFONO DE CONTACTO</span>
+                      <div className="ls-input-wrap">
+                        <span className="ls-icon">📞</span>
+                        <input
+                          type="tel"
+                          value={checkoutGuest.telefono}
+                          onChange={e => setCheckoutGuest(p => ({ ...p, telefono: e.target.value }))}
+                          placeholder="+56 9 1234 5678"
+                          required
+                        />
+                      </div>
+                    </label>
+                  </>
+                )}
+
+                <div style={{ marginTop: '10px', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)', borderRadius: 'var(--radius-md)', padding: '14px 16px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+                  <span style={{ fontSize: '1.3rem' }}>🚚</span>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <strong style={{ fontSize: '0.85rem', color: 'white' }}>Despacho Express Incluido</strong>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--success)' }}>Llega a tu domicilio gratis en 24 horas</span>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="ls-submit-btn"
+                  style={{ marginTop: '12px' }}
+                  disabled={!carrito.length}
+                >
+                  Confirmar y Pagar ➔
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
 
         {/* 🔍 VISTA: BÚSQUEDA/FILTROS EN MÓVIL */}
         {pagina === 'buscar' && (

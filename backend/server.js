@@ -22,13 +22,13 @@ app.use(express.json());
 let dbSql, dbMongo;
 
 const categoriasDemo = [
-    { _id: 'CAT001', nombre: 'Audio', keywords: ['audífonos', 'auriculares', 'headset', 'parlante', 'jbl', 'sony', 'airpods'] },
-    { _id: 'CAT002', nombre: 'Periféricos', keywords: ['teclado', 'mouse', 'ratón', 'webcam', 'mousepad'] },
-    { _id: 'CAT003', nombre: 'Portátiles', keywords: ['laptop', 'portátil', 'notebook', 'macbook', 'mac', 'dell', 'hp pavilion', 'asus zenbook'] },
+    { _id: 'CAT001', nombre: 'Audio', keywords: ['audífonos', 'auriculares', 'headset', 'parlante', 'jbl', 'sony', 'airpods', 'sennheiser', 'barra de sonido', 'soundbar', 'micrófono', 'blue yeti', 'snowball'] },
+    { _id: 'CAT002', nombre: 'Periféricos', keywords: ['teclado', 'mouse', 'ratón', 'webcam', 'mousepad', 'silla gamer', 'keychron', 'logitech mx', 'alfombrilla', 'hub usb', 'anker', 'dxracer', 'silla'] },
+    { _id: 'CAT003', nombre: 'Portátiles', keywords: ['laptop', 'portátil', 'notebook', 'macbook', 'mac', 'dell', 'hp pavilion', 'asus zenbook', 'lenovo', 'acer nitro', 'asus vivobook', 'ideapad', 'thinkpad'] },
     { _id: 'CAT004', nombre: 'Monitores', keywords: ['monitor', 'pantalla'] },
-    { _id: 'CAT005', nombre: 'Gaming', keywords: ['ps5', 'playstation', 'xbox', 'nintendo', 'switch', 'gamer asus rog', 'control'] },
-    { _id: 'CAT006', nombre: 'Smartphones', keywords: ['iphone', 'samsung galaxy', 'xiaomi', 'redmi', 'motorola', 'teléfono', 'celular'] },
-    { _id: 'CAT007', nombre: 'Componentes', keywords: ['rtx', 'rx', 'gpu', 'cpu', 'ryzen', 'intel', 'ram', 'ssd', 'disco', 'fuente'] }
+    { _id: 'CAT005', nombre: 'Gaming', keywords: ['ps5', 'playstation', 'xbox', 'nintendo', 'switch', 'gamer asus rog', 'control', 'mando', 'dualsense'] },
+    { _id: 'CAT006', nombre: 'Smartphones', keywords: ['iphone', 'samsung galaxy', 'xiaomi', 'redmi', 'motorola', 'teléfono', 'celular', 'pixel', 'google pixel', 'galaxy a'] },
+    { _id: 'CAT007', nombre: 'Componentes', keywords: ['rtx', 'rx', 'gpu', 'cpu', 'ryzen', 'intel', 'ram', 'ssd', 'disco', 'fuente', 'ddr', 'nvme', 'placa madre', 'gabinete', 'cooler', 'noctua', 'seasonic', 'crucial', 'core i', 'procesador', 'motherboard', 'disipador'] }
 ];
 
 function detectarCategoria(producto) {
@@ -59,6 +59,10 @@ async function sembrarCategoriasYProductosDemo() {
         { _id: 'PROD010', nombre: 'AirPods Pro 2da Generación', precio: 299990, stock: 12, descuento: 10, descripcion: 'Cancelación activa de ruido, audio espacial personalizado.', imagen: 'https://images.unsplash.com/photo-1603351154351-5e2d0600bb77?w=500&q=80' },
         { _id: 'PROD011', nombre: 'Audífonos Razer BlackShark V2', precio: 79990, stock: 6, descuento: 25, descripcion: 'THX Spatial Audio, micrófono desmontable cardioide.', imagen: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?w=500&q=80' },
         { _id: 'PROD012', nombre: 'Parlante JBL Xtreme 3', precio: 199990, stock: 5, descuento: 18, descripcion: 'IP67, 15h de batería, sonido JBL Pro Sound 360°.', imagen: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&q=80' },
+        { _id: 'PROD051', nombre: 'Barra de Sonido Samsung HW-Q60C 3.1', precio: 249990, stock: 6, descuento: 12, descripcion: '340W, Dolby Atmos, DTS:X, subwoofer inalámbrico incluido.', imagen: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500&q=80' },
+        { _id: 'PROD052', nombre: 'Parlante JBL Charge 5', precio: 119990, stock: 9, descuento: 0, descripcion: 'IP67, 20h batería, carga PowerBank, bass boost.', imagen: 'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500&q=80' },
+        { _id: 'PROD053', nombre: 'Audífonos Sennheiser HD 560S', precio: 149990, stock: 7, descuento: 20, descripcion: 'Respuesta 6Hz–38kHz, diadema abierta, bajo distorsión armónica.', imagen: 'https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=500&q=80' },
+        { _id: 'PROD054', nombre: 'Micrófono Blue Snowball iCE USB', precio: 49990, stock: 15, descuento: 0, descripcion: 'Condensador USB plug-and-play, patrón cardioide, ideal para streaming.', imagen: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&q=80' },
 
         // ── PERIFÉRICOS ────────────────────────────────────────────
         { _id: 'PROD002', nombre: 'Teclado Mecánico Redragon K552', precio: 35990, stock: 20, descuento: 0, descripcion: 'Switches red, retroiluminado RGB, compacto TKL.', imagen: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&q=80' },
@@ -67,6 +71,12 @@ async function sembrarCategoriasYProductosDemo() {
         { _id: 'PROD014', nombre: 'Teclado Corsair K70 RGB MK.2', precio: 129990, stock: 7, descuento: 22, descripcion: 'Switches Cherry MX Red, marco de aluminio anodizado.', imagen: 'https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=500&q=80' },
         { _id: 'PROD015', nombre: 'Mouse SteelSeries Rival 600', precio: 79990, stock: 9, descuento: 30, descripcion: 'Doble sensor óptico, 12.000 CPI, pesos ajustables.', imagen: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&q=80' },
         { _id: 'PROD016', nombre: 'Mousepad Logitech G240 XL', precio: 24990, stock: 25, descuento: 0, descripcion: 'Superficie de tela, 460×400mm, base antideslizante.', imagen: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=500&q=80' },
+        { _id: 'PROD045', nombre: 'Silla Gamer DXRacer Formula Series', precio: 299990, stock: 5, descuento: 10, descripcion: 'Respaldo reclinable 135°, apoyabrazos 3D, tapizado en cuero PU premium.', imagen: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?w=500&q=80' },
+        { _id: 'PROD046', nombre: 'Micrófono Blue Yeti USB Pro', precio: 139990, stock: 8, descuento: 15, descripcion: 'Condensador multi-patrón, 192kHz/24bit, headphone monitoring.', imagen: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500&q=80' },
+        { _id: 'PROD047', nombre: 'Hub USB-C 7 en 1 Anker 555', precio: 49990, stock: 20, descuento: 0, descripcion: '4K HDMI, 2× USB-A 3.0, USB-C 85W PD, lector SD/microSD.', imagen: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=500&q=80' },
+        { _id: 'PROD048', nombre: 'Alfombrilla XL SteelSeries QcK Heavy', precio: 39990, stock: 18, descuento: 0, descripcion: '900×300mm, base de goma antideslizante, superficie micro-texturizada.', imagen: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=500&q=80' },
+        { _id: 'PROD049', nombre: 'Teclado Mecánico Keychron K8 Pro', precio: 89990, stock: 10, descuento: 18, descripcion: 'Hot-swap, Bluetooth 5.1, RGB, switches Gateron G Pro Red.', imagen: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&q=80' },
+        { _id: 'PROD050', nombre: 'Mouse Inalámbrico Logitech MX Master 3S', precio: 119990, stock: 12, descuento: 0, descripcion: '8000 DPI, receptor MagSpeed, carga USB-C, 70 días autonomía.', imagen: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&q=80' },
 
         // ── PORTÁTILES ─────────────────────────────────────────────
         { _id: 'PROD006', nombre: 'Laptop Gamer ASUS ROG Strix G16', precio: 1399990, stock: 4, descuento: 8, descripcion: 'Intel i9-13980HX, 32GB DDR5, RTX 4070, pantalla 240Hz.', imagen: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=500&q=80' },
@@ -74,12 +84,17 @@ async function sembrarCategoriasYProductosDemo() {
         { _id: 'PROD017', nombre: 'HP Pavilion 15 Ryzen 5', precio: 599990, stock: 8, descuento: 14, descripcion: 'AMD Ryzen 5 7530U, 16GB RAM, 512GB SSD, panel FHD IPS.', imagen: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&q=80' },
         { _id: 'PROD018', nombre: 'Dell XPS 15 OLED', precio: 1799990, stock: 3, descuento: 0, descripcion: 'Intel Core i7-13700H, 32GB, 1TB NVMe, pantalla OLED 3.5K.', imagen: 'https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=500&q=80' },
         { _id: 'PROD019', nombre: 'ASUS ZenBook 14 OLED', precio: 849990, stock: 5, descuento: 20, descripcion: 'Core Ultra 7, 16GB LPDDR5, 512GB SSD, pantalla OLED 2.8K.', imagen: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&q=80' },
+        { _id: 'PROD058', nombre: 'Lenovo IdeaPad 5 Ryzen 7 16"', precio: 699990, stock: 7, descuento: 15, descripcion: 'AMD Ryzen 7 7730U, 16GB DDR4, 512GB SSD, pantalla 2K IPS 60Hz.', imagen: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&q=80' },
+        { _id: 'PROD059', nombre: 'Acer Nitro 5 RTX 4060 15.6"', precio: 999990, stock: 5, descuento: 12, descripcion: 'Intel Core i7-13700H, 16GB DDR5, RTX 4060 8GB, pantalla 144Hz FHD.', imagen: 'https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=500&q=80' },
+        { _id: 'PROD060', nombre: 'ASUS VivoBook 15 Core i5', precio: 449990, stock: 10, descuento: 8, descripcion: 'Intel Core i5-1235U, 8GB RAM, 256GB SSD, pantalla FHD IPS, Windows 11.', imagen: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500&q=80' },
+        { _id: 'PROD061', nombre: 'MacBook Pro M3 14"', precio: 1799990, stock: 3, descuento: 0, descripcion: 'Chip M3 Pro, 18GB RAM unificada, 512GB SSD, pantalla Liquid Retina XDR.', imagen: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=500&q=80' },
 
         // ── MONITORES ──────────────────────────────────────────────
         { _id: 'PROD008', nombre: 'Monitor Curvo Samsung Odyssey G5 27"', precio: 219990, stock: 10, descuento: 13, descripcion: 'WQHD 2560×1440, 144Hz, 1ms, FreeSync Premium.', imagen: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&q=80' },
         { _id: 'PROD009', nombre: 'Monitor Gaming LG UltraGear 24"', precio: 149990, stock: 16, descuento: 0, descripcion: 'Full HD IPS, 165Hz, 1ms GtG, compatible G-Sync.', imagen: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=500&q=80' },
         { _id: 'PROD020', nombre: 'Monitor ASUS ProArt 4K 32"', precio: 599990, stock: 4, descuento: 0, descripcion: 'IPS 4K UHD 3840×2160, 100% sRGB, Thunderbolt 4, 60Hz.', imagen: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&q=80' },
         { _id: 'PROD021', nombre: 'Monitor Benq EW2880U 28" 4K', precio: 449990, stock: 6, descuento: 17, descripcion: '4K UHD HDRi, altavoces integrados, USB-C 60W, Eye-Care+.', imagen: 'https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=500&q=80' },
+        { _id: 'PROD062', nombre: 'Monitor Samsung Odyssey G9 49" Ultra-Wide', precio: 1199990, stock: 2, descuento: 10, descripcion: 'DQHD 5120×1440, 240Hz, 1ms, HDR1000, curvatura 1000R.', imagen: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&q=80' },
 
         // ── GAMING ─────────────────────────────────────────────────
         { _id: 'PROD022', nombre: 'PlayStation 5 Slim + Mando DualSense', precio: 699990, stock: 3, descuento: 0, descripcion: 'Consola de nueva generación, 1TB SSD, ray tracing, 4K 120fps.', imagen: 'https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=500&q=80' },
@@ -92,13 +107,30 @@ async function sembrarCategoriasYProductosDemo() {
         { _id: 'PROD027', nombre: 'Samsung Galaxy S24 Ultra 256GB', precio: 999990, stock: 6, descuento: 15, descripcion: 'Galaxy AI, S Pen, cámara 200MP, Snapdragon 8 Gen 3, 5000mAh.', imagen: 'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&q=80' },
         { _id: 'PROD028', nombre: 'Xiaomi Redmi Note 13 Pro+ 256GB', precio: 349990, stock: 14, descuento: 25, descripcion: '200MP, carga 120W HyperCharge, AMOLED 120Hz, IP68.', imagen: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&q=80' },
         { _id: 'PROD029', nombre: 'Motorola Edge 40 Neo 256GB', precio: 299990, stock: 9, descuento: 20, descripcion: '144Hz pOLED, cámara 50MP OIS, 5000mAh, IP68.', imagen: 'https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=500&q=80' },
+        { _id: 'PROD055', nombre: 'Google Pixel 8 Pro 256GB', precio: 799990, stock: 5, descuento: 0, descripcion: 'Google AI, cámara 50MP Ultra-Wide, pantalla LTPO OLED 120Hz.', imagen: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&q=80' },
+        { _id: 'PROD056', nombre: 'Samsung Galaxy A54 5G 256GB', precio: 399990, stock: 12, descuento: 20, descripcion: 'AMOLED 120Hz, triple cámara 50MP, batería 5000mAh, IP67.', imagen: 'https://images.unsplash.com/photo-1591337676887-a217a6970a8a?w=500&q=80' },
+        { _id: 'PROD057', nombre: 'iPhone 15 128GB', precio: 849990, stock: 9, descuento: 0, descripcion: 'Chip A16 Bionic, Dynamic Island, cámara 48MP, USB-C, iOS 17.', imagen: 'https://images.unsplash.com/photo-1632661674596-df8be070a5c5?w=500&q=80' },
 
         // ── COMPONENTES ────────────────────────────────────────────
-        { _id: 'PROD030', nombre: 'GPU NVIDIA RTX 4070 Super 12GB', precio: 699990, stock: 4, descuento: 0, descripcion: '12GB GDDR6X, DLSS 3.5, Ada Lovelace, ray tracing avanzado.', imagen: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=500&q=80' },
-        { _id: 'PROD031', nombre: 'CPU AMD Ryzen 9 7900X', precio: 349990, stock: 5, descuento: 22, descripcion: '12 núcleos / 24 hilos, 5.6GHz boost, AM5, 76MB caché total.', imagen: 'https://images.unsplash.com/photo-1555617766-c94804975da7?w=500&q=80' },
-        { _id: 'PROD032', nombre: 'RAM Corsair Vengeance DDR5 32GB 6000MHz', precio: 129990, stock: 12, descuento: 18, descripcion: 'Kit 2×16GB DDR5, XMP 3.0, latencia CL36, disipador aluminio.', imagen: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=500&q=80' },
-        { _id: 'PROD033', nombre: 'SSD Samsung 990 Pro 2TB NVMe', precio: 149990, stock: 10, descuento: 0, descripcion: 'M.2 PCIe 4.0, 7450/6900 MB/s, optimizado para PS5 y PC.', imagen: 'https://images.unsplash.com/photo-1633355444132-695d5876cd00?w=500&q=80' },
-        { _id: 'PROD034', nombre: 'Fuente 80+ Gold Corsair RM850x', precio: 119990, stock: 7, descuento: 10, descripcion: '850W 80 PLUS Gold, totalmente modular, cero ruido en cargas bajas.', imagen: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?w=500&q=80' }
+        { _id: 'PROD030', nombre: 'GPU NVIDIA RTX 4070 Super 12GB', precio: 699990, stock: 4, descuento: 0, descripcion: '12GB GDDR6X, DLSS 3.5, Ada Lovelace, ray tracing avanzado.', imagen: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&q=80' },
+        { _id: 'PROD031', nombre: 'CPU AMD Ryzen 9 7900X Procesador', precio: 349990, stock: 5, descuento: 22, descripcion: '12 núcleos / 24 hilos, 5.6GHz boost, AM5, 76MB caché total.', imagen: 'https://images.unsplash.com/photo-1591489083244-6b29d1bbbf6c?w=500&q=80' },
+        { _id: 'PROD032', nombre: 'RAM Corsair Vengeance DDR5 32GB 6000MHz', precio: 129990, stock: 12, descuento: 18, descripcion: 'Kit 2×16GB DDR5, XMP 3.0, latencia CL36, disipador aluminio.', imagen: 'https://images.unsplash.com/photo-1562976540-1502c2145186?w=500&q=80' },
+        { _id: 'PROD033', nombre: 'SSD Samsung 990 Pro 2TB NVMe', precio: 149990, stock: 10, descuento: 0, descripcion: 'M.2 PCIe 4.0, 7450/6900 MB/s, optimizado para PS5 y PC.', imagen: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&q=80' },
+        { _id: 'PROD034', nombre: 'Fuente 80+ Gold Corsair RM850x', precio: 119990, stock: 7, descuento: 10, descripcion: '850W 80 PLUS Gold, totalmente modular, cero ruido en cargas bajas.', imagen: 'https://images.unsplash.com/photo-1587202372442-7756f0c2c19e?w=500&q=80' },
+        { _id: 'PROD035', nombre: 'CPU Intel Core i9-14900K Procesador', precio: 549990, stock: 4, descuento: 0, descripcion: '24 núcleos (8P+16E), 6.0GHz Turbo, LGA1700, 125W TDP base.', imagen: 'https://images.unsplash.com/photo-1591489083244-6b29d1bbbf6c?w=500&q=80' },
+        { _id: 'PROD036', nombre: 'CPU AMD Ryzen 5 7600X Procesador', precio: 229990, stock: 8, descuento: 15, descripcion: '6 núcleos / 12 hilos, 5.3GHz boost, AM5, 38MB caché, 105W.', imagen: 'https://images.unsplash.com/photo-1591489083244-6b29d1bbbf6c?w=500&q=80' },
+        { _id: 'PROD037', nombre: 'GPU AMD RX 7800 XT 16GB', precio: 499990, stock: 5, descuento: 8, descripcion: '16GB GDDR6, arquitectura RDNA 3, FSR 3.0, ray tracing.', imagen: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&q=80' },
+        { _id: 'PROD038', nombre: 'RAM G.Skill Trident Z5 DDR5 64GB 6000MHz', precio: 249990, stock: 6, descuento: 0, descripcion: 'Kit 2×32GB DDR5-6000 CL30, RGB Trident Z5, Intel XMP 3.0.', imagen: 'https://images.unsplash.com/photo-1562976540-1502c2145186?w=500&q=80' },
+        { _id: 'PROD039', nombre: 'SSD Crucial P3 Plus 4TB NVMe M.2', precio: 179990, stock: 8, descuento: 20, descripcion: 'PCIe Gen4, 5000/4200 MB/s lectura/escritura, formato 2280.', imagen: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&q=80' },
+        { _id: 'PROD040', nombre: 'Disipador Noctua NH-D15 Chromax', precio: 99990, stock: 9, descuento: 0, descripcion: 'Dual torre, 2× ventiladores 140mm NF-A15, TDP 250W+, silencioso.', imagen: 'https://images.unsplash.com/photo-1616348436168-de43ad0dbbf7?w=500&q=80' },
+        { _id: 'PROD041', nombre: 'Placa Madre ASUS ROG STRIX B650E-F', precio: 389990, stock: 4, descuento: 0, descripcion: 'AM5 DDR5, PCIe 5.0, 2× M.2 PCIe 5.0, WiFi 6E, Bluetooth 5.3.', imagen: 'https://images.unsplash.com/photo-1555617766-c94804975da7?w=500&q=80' },
+        { _id: 'PROD042', nombre: 'Gabinete Lian Li PC-O11 Dynamic EVO', precio: 169990, stock: 6, descuento: 14, descripcion: 'Mid-tower, vidrio templado doble cara, soporte 360mm radiador.', imagen: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&q=80' },
+        { _id: 'PROD043', nombre: 'Fuente Seasonic Focus GX-1000 80+ Gold', precio: 179990, stock: 5, descuento: 0, descripcion: '1000W, 80 PLUS Gold, 100% modular, ventilador de 135mm híbrido.', imagen: 'https://images.unsplash.com/photo-1587202372442-7756f0c2c19e?w=500&q=80' },
+        { _id: 'PROD044', nombre: 'GPU NVIDIA RTX 4090 24GB', precio: 1899990, stock: 2, descuento: 0, descripcion: 'GPU flagship Ada Lovelace, 24GB GDDR6X, DLSS 3, ray tracing nativo.', imagen: 'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&q=80' },
+        { _id: 'PROD063', nombre: 'RAM Kingston Fury Beast DDR4 16GB 3600MHz', precio: 59990, stock: 20, descuento: 25, descripcion: 'Kit 2×8GB DDR4-3600 CL17, AMD EXPO e Intel XMP, disipador negro.', imagen: 'https://images.unsplash.com/photo-1562976540-1502c2145186?w=500&q=80' },
+        { _id: 'PROD064', nombre: 'SSD WD Black SN850X 1TB NVMe', precio: 99990, stock: 14, descuento: 18, descripcion: 'PCIe Gen4, 7300/6600 MB/s, caché 3D NAND, optimizado para gaming.', imagen: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&q=80' },
+        { _id: 'PROD065', nombre: 'Gabinete Fractal Design North XL Mesh', precio: 129990, stock: 7, descuento: 0, descripcion: 'Mid-tower, panel frontal de madera, malla de acero, soporte ATX.', imagen: 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=500&q=80' },
+        { _id: 'PROD066', nombre: 'Cooler Líquido NZXT Kraken 360 RGB', precio: 149990, stock: 5, descuento: 10, descripcion: 'AIO 360mm, bomba ARGB, 3× ventiladores 120mm F120 RGB, LGA1700/AM5.', imagen: 'https://images.unsplash.com/photo-1600541519468-4a185934af24?w=500&q=80' }
     ];
 
     for (const p of demoProducts) {
@@ -126,135 +158,6 @@ async function sembrarCategoriasYProductosDemo() {
 }
 
 
-function detectarCategoria(producto) {
-    const nombre = String(producto.nombre || '').toLowerCase();
-
-    const categoriaEncontrada = categoriasDemo.find(categoria =>
-        categoria.keywords.some(keyword => nombre.includes(keyword))
-    );
-
-    return categoriaEncontrada ? categoriaEncontrada._id : null;
-}
-
-async function sembrarCategoriasYProductosDemo() {
-    const categoriasCollection = dbMongo.collection('categorias');
-    const productosCollection = dbMongo.collection('productos');
-
-    for (const categoria of categoriasDemo) {
-        await categoriasCollection.updateOne(
-            { _id: categoria._id },
-            { $setOnInsert: { _id: categoria._id, nombre: categoria.nombre } },
-            { upsert: true }
-        );
-    }
-
-    const demoProducts = [
-        {
-            _id: 'PROD001',
-            nombre: 'Audífonos Gamer HyperX',
-            precio: 45000,
-            stock: 15,
-            descripcion: 'Audífonos con sonido envolvente 7.1 y cancelación de ruido.',
-            imagen: '/images/audifonos.png'
-        },
-        {
-            _id: 'PROD002',
-            nombre: 'Teclado Mecánico Redragon',
-            precio: 35000,
-            stock: 8,
-            descripcion: 'Teclado mecánico retroiluminado RGB con switches red.',
-            imagen: '/images/teclado.png'
-        },
-        {
-            _id: 'PROD003',
-            nombre: 'Mouse Logitech G Pro',
-            precio: 85000,
-            stock: 20,
-            descripcion: 'Mouse profesional para gaming ultra liviano.',
-            imagen: '/images/mouse.png'
-        },
-        {
-            _id: 'PROD004',
-            nombre: 'Audífonos Sony WH-1000XM4',
-            precio: 249000,
-            stock: 10,
-            descripcion: 'Audífonos inalámbricos premium con cancelación de ruido activa líder de la industria.',
-            imagen: '/images/sony_wh1000xm4.png'
-        },
-        {
-            _id: 'PROD005',
-            nombre: 'Parlante Bluetooth JBL Flip 6',
-            precio: 99000,
-            stock: 14,
-            descripcion: 'Parlante inalámbrico portátil resistente al agua y polvo con sonido potente.',
-            imagen: '/images/jbl_flip6.png'
-        },
-        {
-            _id: 'PROD006',
-            nombre: 'Laptop Gamer ASUS ROG',
-            precio: 1249000,
-            stock: 5,
-            descripcion: 'Intel Core i7, 16GB RAM, RTX 4060, pantalla 144Hz para un juego fluido.',
-            imagen: '/images/laptop_asus.png'
-        },
-        {
-            _id: 'PROD007',
-            nombre: 'MacBook Air M2 Apple',
-            precio: 1099000,
-            stock: 6,
-            descripcion: 'Procesador M2, 8GB RAM unificada, 256GB SSD, pantalla Liquid Retina.',
-            imagen: '/images/macbook_air.png'
-        },
-        {
-            _id: 'PROD008',
-            nombre: 'Monitor Curvo Samsung 27"',
-            precio: 189000,
-            stock: 12,
-            descripcion: 'Monitor Curvo Odyssey G5 con resolución WQHD y tasa de refresco de 144Hz.',
-            imagen: '/images/monitor_samsung.png'
-        },
-        {
-            _id: 'PROD009',
-            nombre: 'Monitor Gaming LG 24"',
-            precio: 129000,
-            stock: 18,
-            descripcion: 'Monitor Full HD con panel IPS, 1ms de respuesta y compatible con FreeSync.',
-            imagen: '/images/monitor_lg.png'
-        }
-    ];
-
-    // Seed the 9 products via upsert
-    for (const p of demoProducts) {
-        await productosCollection.updateOne(
-            { _id: p._id },
-            { $set: p },
-            { upsert: true }
-        );
-    }
-
-    // Assign categories to all products dynamically
-    const todosProductos = await productosCollection.find({}).toArray();
-    const operaciones = todosProductos
-        .map(producto => {
-            const categoriaId = detectarCategoria(producto);
-
-            if (!categoriaId || producto.categoriaId === categoriaId) {
-                return null;
-            }
-
-            return {
-                updateOne: {
-                    filter: { _id: producto._id },
-                    update: { $set: { categoriaId } }
-                }
-            };
-        })
-        .filter(Boolean);
-
-    if (operaciones.length > 0) {
-        await productosCollection.bulkWrite(operaciones);
-    }
-}
 
 async function conectarBases() {
     try {
